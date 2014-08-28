@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   	android:background="#00ffffff">
+ 
+    <LinearLayout android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+		android:paddingBottom="3dp"
+    	android:orientation="horizontal">
+
+        <FrameLayout android:id="@+id/lastReviewsProgress"
+    		android:layout_gravity="center|left"
+			android:paddingTop="15dp"
+			android:paddingBottom="15dp"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+		   		android:layout_gravity="center|center"
+                android:layout_height="wrap_content"/>
+
+           	<ImageView android:id="@+id/image"
+           	    android:background="@drawable/thumbnails_bg"
+		   		android:layout_gravity="center|center"
+		   		android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"/>
+
+        </FrameLayout>
+        
+    	<LinearLayout android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+        	android:layout_gravity="left|center"
+			android:layout_weight="0.9"
+    		android:orientation="vertical">
+
+        	<TextView android:id="@+id/name"
+        		android:layout_width="wrap_content"
+				android:maxLines="2"
+				android:text="Super mega ponchik"
+        		android:layout_height="wrap_content"
+	        	android:layout_gravity="left|center"
+		    	android:textColor="#000000"
+        		android:textSize="18dp"/>
+
+
+		    <TextView android:id="@+id/price"
+				android:paddingTop="5dp"
+			    android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+				android:text="16 rub."
+			    android:textColor="#000000"
+	    		android:layout_gravity="left|top"
+        		android:textSize="18dp"/>
+        		
+		</LinearLayout>
+
+        <FrameLayout android:layout_gravity="center|left"
+			android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+    		
+        	<ImageView android:id="@+id/selected"
+            	android:background="@drawable/prod_checkbox"
+				android:layout_gravity="center|center"
+				android:layout_width="wrap_content"
+	    		android:layout_height="wrap_content"/>
+        
+        </FrameLayout>
+    		
+    </LinearLayout>
+</LinearLayout>
