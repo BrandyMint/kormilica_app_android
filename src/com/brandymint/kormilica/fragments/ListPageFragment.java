@@ -22,7 +22,7 @@ public class ListPageFragment extends CommonFragment {
     private MyAdapter mAdapter;
     private ViewPager mPager;
     private CommonActivity activity;
-//    private CommonPageFragment []  screens;
+    private CommonFragment []  screens;
 	protected ProgressDialog progressDialog; 
 	private AppApplication app;
 
@@ -31,6 +31,7 @@ public class ListPageFragment extends CommonFragment {
 		this.activity = activity;
         mAdapter = new MyAdapter(activity.getSupportFragmentManager());
         app = AppApplication.getInstance();
+        screens = new CommonFragment[mAdapter.getCount()];
 	}
 	
 	
@@ -66,71 +67,19 @@ public class ListPageFragment extends CommonFragment {
         }
     	@Override
         public int getCount() {
-            return COUNT_OF_PAGE;
+            return app.getProductList().size();
         }
  
         @Override
         public Fragment getItem(int position) {
-			return new ListFragment(activity, app.getProductList());
-        	
-/*
-            switch (position) {
-             	case STATE_TOP_PAGE:
-             			screens[STATE_TOP_PAGE] = new TopNewsFragment(activity);
-            		break;
-             	case STATE_WORLDNEWS_PAGE:
-             			screens[STATE_WORLDNEWS_PAGE] =  new WorldNewsFragment(activity);
-            		break;
-             	case STATE_BUSSINESNEWS_PAGE:
-             			screens[STATE_BUSSINESNEWS_PAGE] =  new BussinesNewsFragment(activity);
-            		break;
-             	case STATE_NATIONNEWS_PAGE:
-             			screens[STATE_NATIONNEWS_PAGE] =  new NationNewsFragment(activity);
-             		break;
-             	case STATE_POLITICNEWS_PAGE:
-             			screens[STATE_POLITICNEWS_PAGE] =  new PoliticNewsFragment(activity);
-            		break;
-            }
-            return screens[position];
-
-        	
-        	Log.e(TAG, "position  -  "+position+" =?  "+STATE_BUSSINESNEWS_PAGE);
-            switch (position) {
-         		case STATE_TOP_PAGE:
-         			return new TopNewsFragment(activity);
-         		case STATE_WORLDNEWS_PAGE:
-         			return new WorldNewsFragment(activity);
-         		case STATE_BUSSINESNEWS_PAGE:
-         			return new BussinesNewsFragment(activity);
-         		case STATE_NATIONNEWS_PAGE:
-         			return new NationNewsFragment(activity);
-         		case STATE_POLITICNEWS_PAGE:
-         			return new PoliticNewsFragment(activity);
-         		default:
-         			return null;
-            }
-            */
-//            return null;
+        	if(screens[position] == null)
+        		screens[position] = new ListFragment(activity, app.getProductList().get(position)); 
+        	return screens[position];
         }
         
         @Override
         public CharSequence getPageTitle(int position) {
-/*            switch (position) {
-         		case STATE_TOP_PAGE:
-         			return getString(R.string.top);
-         		case STATE_WORLDNEWS_PAGE:
-         			return getString(R.string.world);
-         		case STATE_BUSSINESNEWS_PAGE:
-         			return getString(R.string.bussines);
-         		case STATE_NATIONNEWS_PAGE:
-         			return getString(R.string.nation);
-         		case STATE_POLITICNEWS_PAGE:
-         			return getString(R.string.politics);
-         		default:
-         			return "";
-            }
-            */
-        	return "Fig cho!!!";
+        	return app.getProductList().get(position).getTitle();
         }        
         
 
@@ -154,4 +103,11 @@ public class ListPageFragment extends CommonFragment {
 		public void startUpdate(View arg0) {
 		}
     }
+
+	@Override
+	public void updateFragment() {
+		for(int i = 0; i < mAdapter.getCount(); i ++)
+        	if(screens[i] != null)
+            	screens[i].updateFragment();
+	}
 }

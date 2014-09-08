@@ -1,9 +1,11 @@
 package com.brandymint.kormilica.data;
 
+import java.util.HashMap;
+
 import org.json.JSONObject;
 import android.util.Log;
 
-public class Product {
+public class Product extends AbstractData {
 	
 	private static final String KEY_ID			 = "id";
 	private static final String KEY_CATEGORY_ID	 = "category_id";
@@ -15,119 +17,132 @@ public class Product {
 	private static final String KEY_PRICE		 = "price";
 	private static final String KEY_IMAGE		 = "image";
 	private static final String KEY_IMAGE_URL	 = "mobile_url";
+	private static final String KEY_DELETED		 = "deleted";
 
-	private String id; 
-	private String categoryId; 
-	private String title; 
-	private String updatedAt; 
-	private int position; 
-	private String priceCents;
-	private String priceCurrency;
-	private String imageUrl;
-	private boolean deleted = false; 
+	public static final String [] PARAMS = {KEY_ID, KEY_CATEGORY_ID, KEY_TITLE, KEY_UPDATED, KEY_POSITION, KEY_CENTS, KEY_CURRENCY, KEY_IMAGE_URL, KEY_DELETED};
+	private HashMap<String, String> map = new HashMap<String, String>();
+	private boolean selected = false;
 
 	public Product() {}
 	
 	public Product(JSONObject jObject) {
 		try {
-			id = jObject.getString(KEY_ID); 
-			categoryId = jObject.getString(KEY_CATEGORY_ID);
-			title = jObject.getString(KEY_TITLE);
-			updatedAt = jObject.getString(KEY_UPDATED); 
-			position = jObject.getInt(KEY_POSITION);
+			map.put(KEY_ID, jObject.getString(KEY_ID)); 
+			map.put(KEY_CATEGORY_ID, jObject.getString(KEY_CATEGORY_ID));
+			map.put(KEY_TITLE, jObject.getString(KEY_TITLE));
+			map.put(KEY_UPDATED, jObject.getString(KEY_UPDATED)); 
+			map.put(KEY_POSITION, ""+jObject.getInt(KEY_POSITION));
 			JSONObject obj1 = jObject.getJSONObject(KEY_PRICE);
-			priceCents = obj1.getString(KEY_CENTS); 
-			priceCurrency = obj1.getString(KEY_CURRENCY);
-			obj1 = jObject.getJSONObject(KEY_IMAGE);
-			imageUrl = obj1.getString(KEY_IMAGE_URL);
+			map.put(KEY_CENTS, obj1.getString(KEY_CENTS)); 
+			map.put(KEY_CURRENCY, obj1.getString(KEY_CURRENCY));
+			try {
+				obj1 = jObject.getJSONObject(KEY_IMAGE);
+				map.put(KEY_IMAGE_URL, obj1.getString(KEY_IMAGE_URL));
+			} catch(Exception e) {
+				map.put(KEY_IMAGE_URL, "");
+			}
+			map.put(KEY_DELETED, ""+false);
 		} catch(Exception ex) {
-			Log.e("VENDOR", "Error parse vendor object. "+ex);
+			Log.e("VENDOR", "Error parse product object. "+ex);
 		}
 	}
 
 	public String toString() {
 		StringBuffer stb = new StringBuffer();
-		stb.append("{ id: "+ id +"; "); 
-		stb.append("categoryId: "+ categoryId +"; ");
-		stb.append("title: "+ title +"; ");
-		stb.append("updatedAt: "+ updatedAt +"; ");
-		stb.append("position: "+ position +"; ");
-		stb.append("priceCents: "+ priceCents +"; ");
-		stb.append("priceCurrency: "+ priceCurrency +"; ");
-		stb.append("imageUrl: "+ imageUrl +"; ");
-		stb.append("deleted: "+ deleted +" }");
+		stb.append("{ ");
+		for(int i = 0; i < PARAMS.length; i ++)
+			stb.append(PARAMS[i]+": "+map.get(PARAMS[i])+"; ");
+		stb.append(" }");
 		return stb.toString().replaceAll("\n", " ");
 	}
 
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
 	public String getId() {
-		return id;
+		return map.get(KEY_ID);
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		map.put(KEY_ID, ""+id);
 	}
 
 	public String getCategoryId() {
-		return categoryId;
+		return map.get(KEY_CATEGORY_ID);
 	}
 
 	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
+		map.put(KEY_CATEGORY_ID, ""+categoryId);
 	}
 
 	public String getTitle() {
-		return title;
+		return map.get(KEY_TITLE);
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		map.put(KEY_TITLE, ""+title);
 	}
 
 	public String getUpdatedAt() {
-		return updatedAt;
+		return map.get(KEY_UPDATED);
 	}
 
 	public void setUpdatedAt(String updatedAt) {
-		this.updatedAt = updatedAt;
+		map.put(KEY_UPDATED, ""+updatedAt);
 	}
 
 	public int getPosition() {
-		return position;
+		return Integer.parseInt(map.get(KEY_POSITION));
 	}
 
 	public void setPosition(int position) {
-		this.position = position;
+		map.put(KEY_POSITION, ""+position);
 	}
 
 	public String getPriceCents() {
-		return priceCents;
+		return map.get(KEY_CENTS);
 	}
 
 	public void setPriceCents(String priceCents) {
-		this.priceCents = priceCents;
+		map.put(KEY_CENTS, priceCents);
 	}
 
 	public String getPriceCurrency() {
-		return priceCurrency;
+		return map.get(KEY_CURRENCY);
 	}
 
 	public void setPriceCurrency(String priceCurrency) {
-		this.priceCurrency = priceCurrency;
+		map.put(KEY_CURRENCY, priceCurrency);
 	}
 
 	public String getImageUrl() {
-		return imageUrl;
+		return map.get(KEY_IMAGE_URL);
 	}
 
 	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+		map.put(KEY_IMAGE_URL, imageUrl);
 	}
 
 	public boolean isDeleted() {
-		return deleted;
+		return Boolean.parseBoolean(map.get(KEY_DELETED));
 	}
 
 	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
+		map.put(KEY_DELETED, ""+deleted);
+	}
+	
+	@Override
+	public void putData(String key, String value) {
+		map.put(key, value);
+	}
+
+	@Override
+	public String getData(String key) {
+		return map.get(key);
 	}
 }

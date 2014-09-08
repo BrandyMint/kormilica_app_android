@@ -25,5 +25,7 @@ public abstract class CommonFragment extends Fragment{
 	
 	@Override
 	public abstract View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
-
+	
+	public abstract void updateFragment();
+	
 }

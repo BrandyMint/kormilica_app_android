@@ -14,10 +14,11 @@ import org.json.JSONObject;
 import com.brandymint.kormilica.AppApplication;
 import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
+import com.brandymint.kormilica.data.AbstractData;
 import com.brandymint.kormilica.data.Category;
-import com.brandymint.kormilica.data.NewsDataItem;
 import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.data.Vendor;
+import com.brandymint.kormilica.db.DBHelper;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -34,18 +35,19 @@ public class NetworkConnection extends AsyncTask<String, String, String> {
 	private static final String KEY_CATEGORIES	 = "categories";
 	private static final String KEY_PRODUCTS	 = "products";
 
-	
 	private CommonActivity activity;
 	private LoadListener loadListener;
 	private String resultString;
-	private ArrayList<Product> list;
+	private ArrayList<AbstractData> productList;
+	private ArrayList<AbstractData> categoryList;
+	private ArrayList<AbstractData> vendorList;
 
 	public NetworkConnection(CommonActivity activity, LoadListener loadListener) {
 		this.activity = activity;
 		this.loadListener = loadListener; 
 	}
 	
-	private ArrayList<Product> getData(String[] arg) {
+	private String getData(String[] arg) {
 		Log.d(TAG, "getData start");
 		try
 		{
@@ -66,28 +68,33 @@ public class NetworkConnection extends AsyncTask<String, String, String> {
     		}
     		reader.close();
     		String answer = stb.toString();
-    		Log.d(TAG, "answer: "+answer);
+    		Log.e(TAG, "answer: "+answer);
+    		categoryList = new ArrayList<AbstractData>();
+    		vendorList = new ArrayList<AbstractData>();
+    		productList = new ArrayList<AbstractData>();
+
     		JSONObject commObject = new JSONObject(answer);
     		Vendor v = new Vendor(commObject.getJSONObject(KEY_VENDOR));
+    		vendorList.add(v);
     		Log.d(TAG, "vendor: "+v.toString());
 
     		JSONArray arr = commObject.getJSONArray(KEY_CATEGORIES);
     		for(int i = 0; i < arr.length(); i ++) {
     			Category cat = new Category((JSONObject)arr.get(i));
+    			categoryList.add(cat);
         		Log.d(TAG, "category "+i+"  = "+cat.toString());
     		}
     		
-    		list = new ArrayList<Product>();
     		arr = commObject.getJSONArray(KEY_PRODUCTS);
     		for(int i = 0; i < arr.length(); i ++) {
     			Product prod = new Product((JSONObject)arr.get(i));
         		Log.d(TAG, "product "+i+"  = "+prod.toString());
-        		list.add(prod);
+        		productList.add(prod);
     		}
-    		return list;
+    		return null;
 		} catch (Exception ex) {
-			Log.e(TAG, "getNewsData error 1  "+ex);
-			return null;
+			Log.e(TAG, "getData error: "+ex);
+			return "getData error: "+ex;
 		}
 	}
 	
@@ -100,10 +107,18 @@ public class NetworkConnection extends AsyncTask<String, String, String> {
 	@Override
 	protected String doInBackground(String... arg) {
 		int resultCode = -1; 
-		list = getData(arg);
-		if(list == null)
+		String err = getData(arg);
+		if(err != null)
 			return activity.getString(R.string.wrong_data);
 		Log.d(TAG, "doInBackground result:  "+resultCode);
+
+		DBHelper dbHelper = AppApplication.getInstance().getDbHelper();
+		dbHelper.updateCategoryTable(categoryList);
+		dbHelper.updateProductTable(productList);
+		dbHelper.updateVendorTable(vendorList);
+	
+		AppApplication.getInstance().setVendor((Vendor)vendorList.get(0));
+		AppApplication.getInstance().fillAppData();
 		return resultString;
 	}
 
@@ -115,6 +130,6 @@ public class NetworkConnection extends AsyncTask<String, String, String> {
 		if(result != null)
 			AppApplication.getInstance().showMessage(activity, activity.getString(R.string.error), result, activity.getString(R.string.ok), null, null, false);
 		else	
-			loadListener.onLoadComplite(list);
+			loadListener.onLoadComplite();
 	}
 }

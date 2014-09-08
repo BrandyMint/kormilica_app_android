@@ -60,17 +60,34 @@
 		</LinearLayout>
 
         <FrameLayout android:layout_gravity="center|left"
+			android:paddingTop="5dp"
+			android:paddingBottom="5dp"
+			android:paddingLeft="5dp"
+			android:paddingRight="5dp"
 			android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
     		
-        	<ImageView android:id="@+id/selected"
-            	android:background="@drawable/prod_checkbox"
-				android:layout_gravity="center|center"
-				android:layout_width="wrap_content"
-	    		android:layout_height="wrap_content"/>
-        
-        </FrameLayout>
-    		
+          	<TextView android:background="@drawable/blue_button_selector"
+          	    android:id="@+id/blue_button"
+				android:textColor="#1aa5ef"
+				android:textSize="16dp"
+           		android:text="@string/to_order"
+				android:layout_gravity="center_vertical|center_horizontal"
+				android:gravity="center_vertical|center_horizontal"
+				android:layout_width="fill_parent"
+    			android:layout_height="wrap_content"/>
+
+          	<TextView android:background="@drawable/green_button_bg"
+          	    android:id="@+id/green_button"
+				android:textColor="#ffffff"
+				android:textSize="16dp"
+           		android:text="@string/in_order"
+				android:layout_gravity="center_vertical|center_horizontal"
+				android:gravity="center_vertical|center_horizontal"
+				android:layout_width="fill_parent"
+    			android:layout_height="wrap_content"/>
+          			
+       	</FrameLayout>
     </LinearLayout>
 </LinearLayout>

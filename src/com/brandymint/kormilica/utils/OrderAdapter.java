@@ -14,12 +14,12 @@ import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.data.Order;
 import com.brandymint.kormilica.data.Product;
 
-public class ProductListAdapter extends BaseAdapter {
+public class OrderAdapter extends BaseAdapter {
 		private ArrayList<Product> listData;
 		private LayoutInflater inflater;
 		private CommonActivity activity;
 
-		public ProductListAdapter(CommonActivity activity, ArrayList<Product> listData) {
+		public OrderAdapter(CommonActivity activity, ArrayList<Product> listData) {
 			inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			this.listData = listData;
 			this.activity = activity;

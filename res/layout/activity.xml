@@ -1,5 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:id="@+id/activity_container"
-	android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+	android:background="#ffffff"
+	android:orientation="vertical"
+    android:layout_height="fill_parent" 
+  	android:layout_width="fill_parent">
+
+	<FrameLayout android:id="@+id/activity_container"
+		android:layout_weight="1"
+		android:layout_width="match_parent"
+    	android:layout_height="match_parent"/>
+
+	
+	<FrameLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+	
+		<LinearLayout android:background="@drawable/blue_bottom_bar"
+		    android:id="@+id/blue_layout"
+			android:orientation="horizontal"
+    		android:layout_height="fill_parent" 
+  			android:layout_width="fill_parent">
+			
+			<LinearLayout android:background="@drawable/blue_bottom_bar"
+				android:layout_weight="1"
+				android:layout_gravity="center|center"
+				android:gravity="center|center"
+				android:orientation="vertical"
+    			android:layout_height="wrap_content" 
+  				android:layout_width="fill_parent">
+  				
+	  			<TextView android:gravity="center|center"
+					android:text="@string/itogo"
+			        android:paddingBottom="1dp"
+					android:textColor="#ffffff"
+					android:textSize="18dp"
+					android:layout_gravity="center_vertical"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"/>
+			
+	  			<TextView android:gravity="center|center"
+	  			    android:id="@+id/summ_order"
+					android:text="1200r."
+					android:textColor="#ffffff"
+					android:textSize="18dp"
+					android:layout_gravity="center_vertical"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"/>
+	  			
+	  		</LinearLayout>    
+		    			
+	  		<TextView android:id="@+id/prepare_order"
+				android:layout_weight="1"
+				android:background="@drawable/prepare_bg_selector"
+				android:gravity="center|center"
+				android:text="@string/prepare_order"
+				android:textColor="#ffffff"
+				android:textSize="18dp"
+				android:layout_gravity="center_vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"/>
+			
+	  	</LinearLayout> 
+
+		<LinearLayout android:background="@drawable/blue_bottom_bar"
+		    android:id="@+id/full_blue_layout"
+			android:orientation="horizontal"
+    		android:layout_height="fill_parent" 
+  			android:layout_width="fill_parent">
+				
+	  		<TextView android:id="@+id/prepare_order_full"
+				android:layout_weight="1"
+				android:background="@drawable/prepare_bg_selector"
+				android:gravity="center|center"
+				android:text="@string/prepare_order"
+				android:textColor="#ffffff"
+				android:textSize="18dp"
+				android:layout_gravity="center_vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"/>
+				
+	  	</LinearLayout>
+	  	
+		<FrameLayout android:background="@drawable/gray_bottom_bar"
+		    android:id="@+id/gray_layout"
+    		android:layout_height="fill_parent" 
+  			android:layout_width="fill_parent">
+  			
+	  		<TextView android:id="@+id/minimal_summ_order"
+				android:gravity="center_vertical"
+				android:text="@string/minimal_summ"
+				android:textColor="#646464"
+				android:textSize="15dp"
+				android:layout_gravity="center|center"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+  			
+		</FrameLayout> 
+					
+	</FrameLayout>
+</LinearLayout>

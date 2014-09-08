@@ -1,8 +1,9 @@
 package com.brandymint.kormilica.fragments;
 
+import com.brandymint.kormilica.AppApplication;
 import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
-import com.brandymint.kormilica.data.CategoryList;
+import com.brandymint.kormilica.utils.OrderAdapter;
 import com.brandymint.kormilica.utils.ProductListAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,20 +13,19 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ListFragment extends CommonFragment {
+public class OrderFragment extends CommonFragment {
 	
 	private CommonActivity activity;
-	private ProductListAdapter adapter;
+	private OrderAdapter adapter;
 	private ListView listView;
 
-	public ListFragment() {
+	public OrderFragment() {
 		super();
 	}
 	
-	public ListFragment(CommonActivity activity, CategoryList catList) {
+	public OrderFragment(CommonActivity activity) {
 		super(activity);
-		this.activity = activity;
-		adapter = new ProductListAdapter(activity, catList.getList());
+		adapter = new OrderAdapter(activity, AppApplication.getInstance().getOrder().getProductList());
 	}
 
 	@Override

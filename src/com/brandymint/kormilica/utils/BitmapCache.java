@@ -28,7 +28,7 @@ import android.widget.ImageView;
 public class BitmapCache {
 	
     private static final String PATH = Environment.getExternalStorageDirectory() + "/" + "appData/Kormilica/";
-	private final static int MAX_CACH_SIZE = 40;
+	private final static int MAX_CACH_SIZE = 30;
 	private final static int MAX_DOWNLOADER_COUNT = 10;
 	private static final String TAG = "BitmapCache";
     private HashMap<String, Bitmap> cache;
