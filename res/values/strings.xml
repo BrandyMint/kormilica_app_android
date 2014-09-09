@@ -19,7 +19,22 @@
     <string name="_pcs">/pcs.</string>
     <string name="pcs">pcs.</string>
     <string name="your_order">Your order</string>
+    <string name="delivery">Delivery</string>
+    
+    <string name="phone">Phone:</string>
+    <string name="city">City:</string>
+    <string name="address">Address:</string>
+    <string name="address_details">Street, home, room</string>
+    <string name="deliver_order">Deliver the order</string>
+    
+    <string name="empty_phone">Field phone is empty.</string>
+    <string name="empty_city">Field city is empty</string>
+    <string name="empty_address">Field address is empty</string>
+        
+    
+
     <string name="prepare_order">Prepare order</string>
+    <string name="free_shipping">Free shipping on orders over</string>
     <string name="error_netw_connection">No network connection. Please check network settings or try later.</string>
 			
 	<string name="author">by Sergey Mashukov</string>

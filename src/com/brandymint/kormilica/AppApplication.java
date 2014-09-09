@@ -19,6 +19,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -26,6 +27,8 @@ import android.view.ContextThemeWrapper;
 public class AppApplication extends Application {
 	
 	private static final String TAG = "AppApplication";
+	public static final String PREFERENCE_NAME = "KormilicaApplication";
+	public static final String IS_FIRST_START = "IsFirstStart";
 	public static final int MAX_FRAGMENT_CACHE_SIZE = 10;
 
 	private static AppApplication instance;
@@ -81,6 +84,12 @@ public class AppApplication extends Application {
     }
 
 	public void fillAppData() {
+		Log.e(TAG, "fillAppData:  read vendor");
+		ArrayList<Vendor> list = dbHelper.readVendorTable();
+		setVendor(list.get(0));
+		Log.e(TAG, "fillAppData:  read vendor:  "+getVendor());
+
+		Log.e(TAG, "fillAppData:  read product");
 		setCategoryList(dbHelper.readCategoryTable());
 		ArrayList<Product> tempList = dbHelper.readProductTable();
 		productList = new ArrayList<CategoryList>();
@@ -94,8 +103,23 @@ public class AppApplication extends Application {
 			if(catList.getList().size() > 0)
 				productList.add(catList);
 		}
+		Log.e(TAG, "fillAppData:  read product compleate");
 //		setOrder(dbHelper.readOrderTable());
 	}
+	
+	public String loadPreference(String preferenceName) {
+    	SharedPreferences preference = getSharedPreferences(PREFERENCE_NAME, 0);
+        String str =preference.getString(preferenceName, null);
+		return str;
+	}
+	
+	public void savePreference(String preferenceName, String value) {
+        SharedPreferences preference = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putString(preferenceName, value);
+        editor.commit();
+	}
+	
 	
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

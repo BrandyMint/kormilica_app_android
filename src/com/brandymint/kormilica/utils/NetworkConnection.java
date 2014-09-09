@@ -1,6 +1,7 @@
 package com.brandymint.kormilica.utils;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -29,7 +30,8 @@ public class NetworkConnection extends AsyncTask<String, String, String> {
 	private static final String TAG				 = "NetworkConnection";  
 	private static final String BASE_URL		 = "http://api.kormilica.info/";
 	private static final String API_VERSION		 = "v1";
-	private static final String VENDOR_KEY		 = "467abe2e7d33e6455fe905e879fd36be";
+//	private static final String VENDOR_KEY		 = "467abe2e7d33e6455fe905e879fd36be";
+	private static final String VENDOR_KEY		 = "45751f0d53a336ffb5fb91447c165fc9";
 	
 	private static final String KEY_VENDOR		 = "vendor";
 	private static final String KEY_CATEGORIES	 = "categories";
@@ -49,24 +51,35 @@ public class NetworkConnection extends AsyncTask<String, String, String> {
 	
 	private String getData(String[] arg) {
 		Log.d(TAG, "getData start");
+		String firstStart = AppApplication.getInstance().loadPreference(AppApplication.IS_FIRST_START);
 		try
-		{
-			String url = BASE_URL + API_VERSION + "/bundles.json";
-			HttpClient httpclient = new DefaultHttpClient();
-		    HttpGet httpget = new HttpGet(url);
-		    httpget.setHeader("X-Vendor-Key", VENDOR_KEY);	
-		    httpget.setHeader("Accept","application/xml; charset=utf-8");
-		    httpget.setHeader("Content-Type","application/xml; charset=utf-8");	
-		    
-		    HttpResponse response = httpclient.execute(httpget);
-    		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
+		{	
     		StringBuffer stb = new StringBuffer();
-    		String str;
-    		while((str = reader.readLine()) != null) {
-    			stb.append(str);
-    			stb.append("\n");
-    		}
-    		reader.close();
+			if(firstStart == null || Boolean.parseBoolean(firstStart)) {
+			    InputStream json=activity.getAssets().open("default.json");
+			    BufferedReader in = new BufferedReader(new InputStreamReader(json, "UTF-8"));
+			    String str;
+			    while ((str=in.readLine()) != null) {
+			      stb.append(str);
+			    }
+			    in.close();				
+			} else {
+				String url = BASE_URL + API_VERSION + "/bundles.json";
+				HttpClient httpclient = new DefaultHttpClient();
+			    HttpGet httpget = new HttpGet(url);
+			    httpget.setHeader("X-Vendor-Key", VENDOR_KEY);	
+			    httpget.setHeader("Accept","application/xml; charset=utf-8");
+			    httpget.setHeader("Content-Type","application/xml; charset=utf-8");	
+			    
+			    HttpResponse response = httpclient.execute(httpget);
+	    		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
+	    		String str;
+	    		while((str = reader.readLine()) != null) {
+	    			stb.append(str);
+	    			stb.append("\n");
+	    		}
+	    		reader.close();
+			}
     		String answer = stb.toString();
     		Log.e(TAG, "answer: "+answer);
     		categoryList = new ArrayList<AbstractData>();
@@ -117,8 +130,8 @@ public class NetworkConnection extends AsyncTask<String, String, String> {
 		dbHelper.updateProductTable(productList);
 		dbHelper.updateVendorTable(vendorList);
 	
-		AppApplication.getInstance().setVendor((Vendor)vendorList.get(0));
 		AppApplication.getInstance().fillAppData();
+		AppApplication.getInstance().savePreference(AppApplication.IS_FIRST_START, ""+false);
 		return resultString;
 	}
 

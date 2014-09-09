@@ -3,8 +3,8 @@ package com.brandymint.kormilica.fragments;
 import com.brandymint.kormilica.AppApplication;
 import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
+import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.utils.OrderAdapter;
-import com.brandymint.kormilica.utils.ProductListAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +25,17 @@ public class OrderFragment extends CommonFragment {
 	
 	public OrderFragment(CommonActivity activity) {
 		super(activity);
+		this.activity = activity;
+		cleanProdOrderList();
 		adapter = new OrderAdapter(activity, AppApplication.getInstance().getOrder().getProductList());
 	}
 
+	public void cleanProdOrderList() {
+		for(Product prod: AppApplication.getInstance().getOrder().getProductList())
+			if(prod.getId().equals("temp"))
+				AppApplication.getInstance().getOrder().getProductList().remove(prod);
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.list_fragment, container, false);

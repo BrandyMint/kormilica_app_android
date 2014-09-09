@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+	android:paddingTop="15dp"
+	android:paddingBottom="1dp"
+	android:paddingLeft="5dp"
+	android:paddingRight="5dp"
+   	android:background="#00ffffff">
+ 
+  	<LinearLayout android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:paddingBottom="3dp"
+   		android:orientation="horizontal">
+
+		<FrameLayout android:layout_gravity="center|left"
+			android:layout_weight="1"
+           	android:layout_width="fill_parent"
+           	android:layout_height="wrap_content">
+  	    
+		    <TextView android:layout_width="fill_parent"
+				android:maxLines="2"
+				android:text="@string/delivery"
+       			android:layout_height="wrap_content"
+        		android:layout_gravity="left|center"
+	    		android:textColor="#000000"
+       			android:textSize="18dp"/>
+		    	
+		</FrameLayout>
+
+		<FrameLayout android:layout_gravity="center|left"
+   	    	android:background="@drawable/black_border_bg"
+			android:paddingTop="5dp"
+			android:layout_weight="1.4"
+			android:paddingBottom="5dp"
+           	android:id="@+id/button"
+           	android:layout_width="fill_parent"
+           	android:layout_height="wrap_content">
+   	
+   			<TextView android:id="@+id/summ"
+				android:textColor="#000000"
+				android:textSize="13dp"
+   				android:text="1600руб."
+				android:layout_gravity="center_vertical|center_horizontal"
+				android:layout_weight="1"
+				android:gravity="center_vertical|center_horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+          			
+   		</FrameLayout>
+	</LinearLayout>
+   	
+  	<TextView android:id="@+id/delivery"
+		android:textSize="13dp"
+		android:textColor="#646464"
+		android:layout_gravity="center_vertical|center_horizontal"
+		android:layout_weight="1.4"
+		android:gravity="center_vertical|center_horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+  		
+</LinearLayout>

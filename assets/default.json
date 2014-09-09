@@ -1,0 +1,226 @@
+{
+    "vendor": {
+        "key": "467abe2e7d33e6455fe905e879fd36be",
+        "name": "Демо Пончики",
+        "phone": "+7 (905) 198-11-71",
+        "updated_at": "2014-08-12T17:22:16.449+04:00",
+        "city": "Чебоксары",
+        "mobile_logo_url": "http://aydamarket.ru/uploads/vendor/mobile_logo/2/mob_logo.png",
+        "mobile_title": "Кормилица<br>демо",
+        "mobile_subject": "Кормилица-доставка (демо)",
+        "mobile_description": "Комплекс приема онлайн-заказов через интернет и мобильные приложения.\r\n\r\n<ul>\r\n<li>Возможность принимать online-заказы</li>\r\n<li>Мгновенное обновление витрины (меню) на всех платформах (что очень удобно при проведении акций и скидок)<li>\r\n<li>Единый дизайн для всех платформ</li>\r\n<li>Техническую поддержку всех платформ (обновление ПО)</li>\r\n<li>Автоматизированная обработка, формирования и уведомления по заказам.</li>\r\n<li>Полную статистику продаж (по просмотрам меню, по среднему чеку, количеству и времени заказов и т.д.)</li\r\n</ul>\r\n\r\n<p>Для кого этот сервис:</p>\r\n\r\n<ul>\r\n<li>Кафе, баров, ресторанов </li>\r\n<li>Служб  доставки</li>\r\n<li>Розничных магазинов.</li>\r\n<li>А также для любого  другого бизнеса, который хочет выйти на рынок мобильных продаж.</li>\r\n</ul>",
+        "mobile_footer": "Выберите блюдо на заказ",
+        "mobile_delivery": "Доставка бесплатно от 500 руб.",
+        "mobile_empty_cart_alert": "Выберите из списка блюдо на заказ.",
+        "mobile_minimal_alert": "Минимальный заказ от 300 р.",
+        "minimal_price": {
+            "cents": 30000,
+            "currency": "RUB"
+        },
+        "delivery_price": {
+            "cents": 0,
+            "currency": "RUB"
+        },
+        "currency": "RUB",
+        "is_demo": true
+    },
+    "categories": [
+                   {
+                   "id": 1,
+                   "name": "Пончики",
+                   "updated_at": "2014-03-28T11:39:33.333+04:00",
+                   "position": 0
+                   },
+                   {
+                   "id": 4,
+                   "name": "Напитки",
+                   "updated_at": "2014-04-17T12:07:30.797+04:00",
+                   "position": 0
+                   }
+                   ],
+    "products": [
+                 {
+                 "id": 8,
+                 "category_id": 1,
+                 "title": "Вкусняшка 1",
+                 "updated_at": "2014-03-28T12:49:59.072+04:00",
+                 "position": 10,
+                 "price": {
+                 "cents": 1000,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/8/mobile_8.png"
+                 }
+                 },
+                 {
+                 "id": 9,
+                 "category_id": 1,
+                 "title": "Вкусняшка 2",
+                 "updated_at": "2014-03-31T10:47:08.594+04:00",
+                 "position": 12,
+                 "price": {
+                 "cents": 99900,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/9/mobile_9.png"
+                 }
+                 },
+                 {
+                 "id": 13,
+                 "category_id": 1,
+                 "title": "Вкусняшка 6",
+                 "updated_at": "2014-03-28T12:49:29.836+04:00",
+                 "position": 7,
+                 "price": {
+                 "cents": 3300,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/13/mobile_13.png"
+                 }
+                 },
+                 {
+                 "id": 14,
+                 "category_id": 1,
+                 "title": "Вкусняшка 7",
+                 "updated_at": "2014-03-28T12:47:58.483+04:00",
+                 "position": 6,
+                 "price": {
+                 "cents": 2900,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/14/mobile_14.png"
+                 }
+                 },
+                 {
+                 "id": 16,
+                 "category_id": 4,
+                 "title": "Вода-вода",
+                 "updated_at": "2014-04-21T17:17:34.580+04:00",
+                 "position": 1,
+                 "price": {
+                 "cents": 12000,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/16/mobile_16.png"
+                 }
+                 },
+                 {
+                 "id": 10,
+                 "category_id": 1,
+                 "title": "Вкусняшка 3",
+                 "updated_at": "2014-03-28T12:48:59.814+04:00",
+                 "position": 11,
+                 "price": {
+                 "cents": 32300,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/10/mobile_10.png"
+                 }
+                 },
+                 {
+                 "id": 12,
+                 "category_id": 1,
+                 "title": "Вкусняшка 5",
+                 "updated_at": "2014-03-28T12:48:23.825+04:00",
+                 "position": 8,
+                 "price": {
+                 "cents": 66600,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/12/mobile_12.png"
+                 }
+                 },
+                 {
+                 "id": 11,
+                 "category_id": 1,
+                 "title": "Вкусняшка 4",
+                 "updated_at": "2014-03-28T12:50:17.351+04:00",
+                 "position": 9,
+                 "price": {
+                 "cents": 148800,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/11/mobile_11.png"
+                 }
+                 },
+                 {
+                 "id": 17,
+                 "category_id": 1,
+                 "title": "Вкусняшка 18",
+                 "updated_at": "2014-04-25T10:01:06.238+04:00",
+                 "position": 5,
+                 "price": {
+                 "cents": 1232100,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/17/mobile_.png"
+                 }
+                 },
+                 {
+                 "id": 19,
+                 "category_id": 1,
+                 "title": "Вкусняшка 19",
+                 "updated_at": "2014-04-25T10:01:31.729+04:00",
+                 "position": 4,
+                 "price": {
+                 "cents": 1232100,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/19/mobile_.png"
+                 }
+                 },
+                 {
+                 "id": 20,
+                 "category_id": 1,
+                 "title": "Вкусняшка 20",
+                 "updated_at": "2014-04-25T10:01:44.032+04:00",
+                 "position": 3,
+                 "price": {
+                 "cents": 1232100,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/20/mobile_.png"
+                 }
+                 },
+                 {
+                 "id": 21,
+                 "category_id": 1,
+                 "title": "Вкусняшка 21",
+                 "updated_at": "2014-04-25T10:01:55.986+04:00",
+                 "position": 2,
+                 "price": {
+                 "cents": 1232100,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/21/mobile_.png"
+                 }
+                 },
+                 {
+                 "id": 22,
+                 "category_id": 1,
+                 "title": "Вкусняшка 22",
+                 "updated_at": "2014-04-25T10:02:04.177+04:00",
+                 "position": 1,
+                 "price": {
+                 "cents": 1232100,
+                 "currency": "RUB"
+                 },
+                 "image": {
+                 "mobile_url": "http://aydamarket.ru/uploads/product/image/22/mobile_.png"
+                 }
+                 }
+                 ],
+    "update": "now"
+}

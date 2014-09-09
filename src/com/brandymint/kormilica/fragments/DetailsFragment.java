@@ -37,37 +37,10 @@ public class DetailsFragment extends CommonFragment {
 		return view;
 	}
 	
-	public void showPicker() {
-		LayoutInflater factory = LayoutInflater.from(activity);
-        final View v = factory.inflate(R.layout.picker_dialog, null);
-        final NumberPicker np = (NumberPicker) v.findViewById(R.id.picker);
-        np.setMaxValue(100);
-        np.setMinValue(1);
-        np.setValue(AppApplication.getInstance().getOrder().getCountOfProduct(product.getId()));
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		builder.setInverseBackgroundForced(false);
-		builder.setTitle(R.string.select_count);
-		builder.setView(v);
-		builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				AppApplication.getInstance().getOrder().changeCount(product, np.getValue());
-				updateFragment();
-				activity.updateView();
-				dialog.cancel();
-			}
-		});
-		builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		});
-   		AlertDialog alert = builder.create();
-		alert.show();
-    }
-	
-
 	@Override
-	public void updateFragment() {	
+	public void updateFragment() {
+		if(view == null)
+			return;
 		TextView name = (TextView) view.findViewById(R.id.name);
 		TextView price = (TextView) view.findViewById(R.id.price);
 		ImageView imView = (ImageView)view.findViewById(R.id.image);
@@ -93,7 +66,7 @@ public class DetailsFragment extends CommonFragment {
 		greenButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showPicker();
+				activity.showPicker(product);
 			}
 		});
 		blueButton.setOnClickListener(new View.OnClickListener() {

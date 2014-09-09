@@ -1,11 +1,16 @@
 package com.brandymint.kormilica;
 
 import java.util.LinkedList;
+
+import com.brandymint.kormilica.data.Product;
+import com.brandymint.kormilica.fragments.AddressFragment;
 import com.brandymint.kormilica.fragments.CommonFragment;
 import com.brandymint.kormilica.fragments.ListPageFragment;
 import com.brandymint.kormilica.fragments.OrderFragment;
 import com.brandymint.kormilica.utils.LoadListener;
 import com.brandymint.kormilica.utils.NetworkConnection;
+import com.brandymint.kormilica.utils.PrepareData;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -23,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 public class CommonActivity extends FragmentActivity implements LoadListener{
@@ -52,7 +58,12 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 			app.showMessage(this, getString(R.string.warning), getString(R.string.error_netw_connection), getString(R.string.action_settings), getString(R.string.exit), new Intent(android.provider.Settings.ACTION_SETTINGS), true);
 			return;
 		}
-		(new NetworkConnection(this, this)).execute();
+		String firstStart = AppApplication.getInstance().loadPreference(AppApplication.IS_FIRST_START);
+		if(firstStart == null || Boolean.parseBoolean(firstStart))
+			(new NetworkConnection(this, this)).execute();
+		else
+			(new PrepareData(this, this)).execute();
+			
     }
     
 	public void updateView() {
@@ -62,15 +73,34 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 		TextView minimalOrder = (TextView) findViewById(R.id.minimal_summ_order);
 		LinearLayout blueLayout = (LinearLayout) findViewById(R.id.blue_layout);
 		LinearLayout fullBlueLayout = (LinearLayout) findViewById(R.id.full_blue_layout);
+		TextView itogo_summ = (TextView) findViewById(R.id.itogo_summ);
+		FrameLayout itogoLayout = (FrameLayout) findViewById(R.id.itogo_layout);
 		FrameLayout grayLayout = (FrameLayout) findViewById(R.id.gray_layout);
 
-		if(app.getFragmentCache().size() > 1 && OrderFragment.class.isInstance(app.getFragmentCache().get(0))) {
+		if(app.getFragmentCache().size() > 1 && AddressFragment.class.isInstance(app.getFragmentCache().get(0))) {
 			setTitle(R.string.your_order);
+			itogoLayout.setVisibility(View.INVISIBLE);
+			fullBlueLayout.setVisibility(View.INVISIBLE);
+			blueLayout.setVisibility(View.INVISIBLE);
+			grayLayout.setVisibility(View.INVISIBLE);
+		  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(1,1);
+		  	itogoLayout.setLayoutParams(parms);
+		} else if(app.getFragmentCache().size() > 1 && OrderFragment.class.isInstance(app.getFragmentCache().get(0))) {
+			setTitle(R.string.your_order);
+			itogoLayout.setVisibility(View.VISIBLE);
 			fullBlueLayout.setVisibility(View.VISIBLE);
 			blueLayout.setVisibility(View.INVISIBLE);
 			grayLayout.setVisibility(View.INVISIBLE);
+		  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		  	int summ = AppApplication.getInstance().getOrder().getSummOrder() + Integer.parseInt(AppApplication.getInstance().getVendor().getDeliveryPriceCents());
+		  	itogo_summ.setText(getString(R.string.itogo)+": "+summ+" "+AppApplication.getInstance().getVendor().getDeliveryPriceCurrency());
+		  	itogoLayout.setLayoutParams(parms);
 		} else {
 			setTitle(R.string.app_name);
+			itogoLayout.setVisibility(View.INVISIBLE);
+		  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(1,1);
+		  	itogoLayout.setLayoutParams(parms);
+			
 			fullBlueLayout.setVisibility(View.INVISIBLE);
 			if(app.getOrder() == null) {
 				blueLayout.setVisibility(View.INVISIBLE);
@@ -86,7 +116,8 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 		prepareOrderFull.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				addFragment(new OrderFragment(activity));
+				((OrderFragment)app.getFragmentCache().get(0)).cleanProdOrderList();
+				addFragment(new AddressFragment(activity));
 			}
 		});
 		prepareOrder.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +128,39 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 		});
 	}
     
+	public void showPicker(final Product product) {
+		LayoutInflater factory = LayoutInflater.from(activity);
+        final View v = factory.inflate(R.layout.picker_dialog, null);
+        final NumberPicker np = (NumberPicker) v.findViewById(R.id.picker);
+        np.setMaxValue(100);
+        np.setMinValue(1);
+        np.setValue(AppApplication.getInstance().getOrder().getCountOfProduct(product.getId()));
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setInverseBackgroundForced(false);
+		builder.setTitle(R.string.select_count);
+		builder.setView(v);
+		Log.e("ShowPicker", "product: "+product);
+		Log.e("ShowPicker", "order: "+AppApplication.getInstance().getOrder());
+		
+		builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				Log.e("ShowPicker tap", "product: "+product);
+				Log.e("ShowPicker tap", "order: "+AppApplication.getInstance().getOrder());
+
+				AppApplication.getInstance().getOrder().changeCount(product, np.getValue());
+				app.getFragmentCache().get(0).updateFragment();
+				activity.updateView();
+				dialog.cancel();
+			}
+		});
+		builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+   		AlertDialog alert = builder.create();
+		alert.show();
+    }
     
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -6,12 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.brandymint.kormilica.AppApplication;
 import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
-import com.brandymint.kormilica.data.Order;
 import com.brandymint.kormilica.data.Product;
 
 public class OrderAdapter extends BaseAdapter {
@@ -23,6 +22,9 @@ public class OrderAdapter extends BaseAdapter {
 			inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			this.listData = listData;
 			this.activity = activity;
+			Product temp = new Product();
+			temp.setId("temp");
+			this.listData.add(temp);
 		}
 
 		public void setListData(ArrayList<Product> listData) {
@@ -49,43 +51,37 @@ public class OrderAdapter extends BaseAdapter {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = inflater.inflate(R.layout.list_item, parent, false);
+			View view;
 			final Product item = (Product) getItem(position);
-			TextView name = (TextView) view.findViewById(R.id.name);
-			TextView price = (TextView) view.findViewById(R.id.price);
-			ImageView imView = (ImageView)view.findViewById(R.id.image);
-			final TextView blueButton = (TextView)view.findViewById(R.id.blue_button);
-			final TextView greenButton = (TextView)view.findViewById(R.id.green_button);
-			name.setText(item.getTitle());
-			if(item.isSelected()) {
-				greenButton.setVisibility(View.VISIBLE);
-				blueButton.setVisibility(View.INVISIBLE);
+			if(position == listData.size() - 1) {
+				view = inflater.inflate(R.layout.last_item_order, parent, false);
+				TextView price = (TextView) view.findViewById(R.id.summ);
+				TextView ifely = (TextView) view.findViewById(R.id.delivery);
+				price.setText(AppApplication.getInstance().getVendor().getDeliveryPriceCents()+" "+AppApplication.getInstance().getVendor().getDeliveryPriceCurrency());
+				ifely.setText(AppApplication.getInstance().getVendor().getMobileDelivery());
+				
 			} else {
-				greenButton.setVisibility(View.INVISIBLE);
-				blueButton.setVisibility(View.VISIBLE);
+				view = inflater.inflate(R.layout.order_list_item, parent, false);
+				TextView name = (TextView) view.findViewById(R.id.name);
+				TextView price = (TextView) view.findViewById(R.id.price);
+				TextView count = (TextView)view.findViewById(R.id.count);
+				TextView summ = (TextView)view.findViewById(R.id.summ);
+				FrameLayout button = (FrameLayout)view.findViewById(R.id.button);
+
+				name.setText(item.getTitle());
+				price.setText(item.getPriceCents() +"  " +item.getPriceCurrency()+""+activity.getString(R.string._pcs));
+				count.setText(AppApplication.getInstance().getOrder().getCountOfProduct(item.getId())+""+activity.getString(R.string.pcs));
+				try{
+					int sum = Integer.parseInt(item.getPriceCents()) * AppApplication.getInstance().getOrder().getCountOfProduct(item.getId());
+					summ.setText(sum+" "+item.getPriceCurrency());
+				} catch(Exception ex){}
+				button.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						activity.showPicker(item);
+					}
+				});
 			}
-			price.setText(item.getPriceCents() +"  " +item.getPriceCurrency());
-			if(item.getImageUrl() != null) {
-				imView.setTag(item.getImageUrl());
-//				AppApplication.getInstance().getBitmapCache().loadImage(imView, true);
-			}
-			greenButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-				}
-			});
-			blueButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if(AppApplication.getInstance().getOrder() == null)
-						AppApplication.getInstance().setOrder(new Order());
-					AppApplication.getInstance().getOrder().addProduct(item);
-					greenButton.setVisibility(View.VISIBLE);
-					blueButton.setVisibility(View.INVISIBLE);
-					item.setSelected(true);
-					activity.updateView();
-				}
-			});
 			return view;
 		}
 }

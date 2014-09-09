@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.util.Log;
+
 
 public class Order {
 	
@@ -24,6 +26,7 @@ public class Order {
 	}
 	
 	public void addProduct(Product product) {
+		Log.e("ORDER", "Add product to order:  "+ product);
 		listProducts.add(product);
 		mapCounts.put(product.getId(), ""+1);
 		calculateSumm();
@@ -48,8 +51,12 @@ public class Order {
 	
 	private void calculateSumm() {
 		summ = 0;
-		for(Product prod: listProducts)
-			summ += (Integer.parseInt(prod.getPriceCents()) * Integer.parseInt(mapCounts.get(prod.getId())));
+		Log.e("ORDER", "listProducts1 -- "+listProducts.size());
+		for(Product prod: listProducts) {
+			if(!prod.getId().equals("temp"))
+				summ += (Integer.parseInt(prod.getPriceCents()) * Integer.parseInt(mapCounts.get(prod.getId())));
+		}
+		Log.e("ORDER", "listProducts2  -- "+listProducts.size());
 	}
 	
 	public int getSummOrder() {
