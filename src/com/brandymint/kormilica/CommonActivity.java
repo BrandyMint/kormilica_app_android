@@ -1,16 +1,16 @@
 package com.brandymint.kormilica;
 
-import java.util.LinkedList;
-
+import com.brandymint.kormilica.data.CategoryList;
+import com.brandymint.kormilica.data.Order;
 import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.fragments.AddressFragment;
 import com.brandymint.kormilica.fragments.CommonFragment;
+import com.brandymint.kormilica.fragments.DetailsFragment;
 import com.brandymint.kormilica.fragments.ListPageFragment;
 import com.brandymint.kormilica.fragments.OrderFragment;
 import com.brandymint.kormilica.utils.LoadListener;
-import com.brandymint.kormilica.utils.NetworkConnection;
+import com.brandymint.kormilica.utils.GetDataTask;
 import com.brandymint.kormilica.utils.PrepareData;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -30,8 +30,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class CommonActivity extends FragmentActivity implements LoadListener{
+public class CommonActivity extends FragmentActivity implements LoadListener {
 	
 	private static final String TAG = "CommonActivity";
     private CommonActivity activity;
@@ -46,6 +47,7 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
         activity = this;
 		setContentView(R.layout.activity);
         app = AppApplication.getInstance();
+        app.setActivity(this);
         actionBar = getActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(0xff999999));
         int actionBarTitleId = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
@@ -60,7 +62,7 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 		}
 		String firstStart = AppApplication.getInstance().loadPreference(AppApplication.IS_FIRST_START);
 		if(firstStart == null || Boolean.parseBoolean(firstStart))
-			(new NetworkConnection(this, this)).execute();
+			(new GetDataTask(this, this, true)).execute();
 		else
 			(new PrepareData(this, this)).execute();
 			
@@ -74,10 +76,20 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 		LinearLayout blueLayout = (LinearLayout) findViewById(R.id.blue_layout);
 		LinearLayout fullBlueLayout = (LinearLayout) findViewById(R.id.full_blue_layout);
 		TextView itogo_summ = (TextView) findViewById(R.id.itogo_summ);
+		FrameLayout bottomLayout = (FrameLayout) findViewById(R.id.bottom_layout);
 		FrameLayout itogoLayout = (FrameLayout) findViewById(R.id.itogo_layout);
 		FrameLayout grayLayout = (FrameLayout) findViewById(R.id.gray_layout);
 
-		if(app.getFragmentCache().size() > 1 && AddressFragment.class.isInstance(app.getFragmentCache().get(0))) {
+		
+		if(app.getFragmentCache().size() > 1 && DetailsFragment.class.isInstance(app.getFragmentCache().get(0))) {
+			itogoLayout.setVisibility(View.INVISIBLE);
+			fullBlueLayout.setVisibility(View.INVISIBLE);
+			blueLayout.setVisibility(View.INVISIBLE);
+			grayLayout.setVisibility(View.INVISIBLE);
+		  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(1,1);
+		  	itogoLayout.setLayoutParams(parms);
+		  	bottomLayout.setLayoutParams(parms);
+		} else if(app.getFragmentCache().size() > 1 && AddressFragment.class.isInstance(app.getFragmentCache().get(0))) {
 			setTitle(R.string.your_order);
 			itogoLayout.setVisibility(View.INVISIBLE);
 			fullBlueLayout.setVisibility(View.INVISIBLE);
@@ -85,6 +97,7 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 			grayLayout.setVisibility(View.INVISIBLE);
 		  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(1,1);
 		  	itogoLayout.setLayoutParams(parms);
+		  	bottomLayout.setLayoutParams(parms);
 		} else if(app.getFragmentCache().size() > 1 && OrderFragment.class.isInstance(app.getFragmentCache().get(0))) {
 			setTitle(R.string.your_order);
 			itogoLayout.setVisibility(View.VISIBLE);
@@ -93,47 +106,67 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 			grayLayout.setVisibility(View.INVISIBLE);
 		  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		  	int summ = AppApplication.getInstance().getOrder().getSummOrder() + Integer.parseInt(AppApplication.getInstance().getVendor().getDeliveryPriceCents());
-		  	itogo_summ.setText(getString(R.string.itogo)+": "+summ+" "+AppApplication.getInstance().getVendor().getDeliveryPriceCurrency());
+		  	itogo_summ.setText(getString(R.string.itogo)+": "+summ/100+" "+AppApplication.getInstance().getVendor().getDeliveryPriceCurrency());
 		  	itogoLayout.setLayoutParams(parms);
+		  	bottomLayout.setLayoutParams(parms);
+		  	
 		} else {
-			setTitle(R.string.app_name);
+			setTitle(app.getVendor().getName());
 			itogoLayout.setVisibility(View.INVISIBLE);
 		  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(1,1);
 		  	itogoLayout.setLayoutParams(parms);
 			
 			fullBlueLayout.setVisibility(View.INVISIBLE);
-			if(app.getOrder() == null) {
+
+			if(app.getOrder() == null ||  app.getOrder().getProductList().size() <= 0) {
 				blueLayout.setVisibility(View.INVISIBLE);
 				grayLayout.setVisibility(View.VISIBLE);
-				if(app.getVendor() != null)
-					minimalOrder.setText(getString(R.string.minimal_summ)+" "+app.getVendor().getMinimalPriceCents()+"  "+app.getVendor().getMinimalPriceCurrency());
 			} else {
 				blueLayout.setVisibility(View.VISIBLE);
 				grayLayout.setVisibility(View.INVISIBLE);
-				summOrder.setText(""+app.getOrder().getSummOrder()+"  "+app.getVendor().getMinimalPriceCurrency());
+				int summ = app.getOrder().getSummOrder()/100;
+				summOrder.setText(""+summ+"  "+app.getVendor().getMinimalPriceCurrency());
 			}
+
+			if(app.getVendor() != null)
+				minimalOrder.setText(app.getVendor().getMobileMinimalAlert());
+		  	parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		  	bottomLayout.setLayoutParams(parms);
 		}
 		prepareOrderFull.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((OrderFragment)app.getFragmentCache().get(0)).cleanProdOrderList();
+//				((OrderFragment)app.getFragmentCache().get(0)).cleanProdOrderList();
 				addFragment(new AddressFragment(activity));
 			}
 		});
-		prepareOrder.setOnClickListener(new View.OnClickListener() {
+		blueLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				addFragment(new OrderFragment(activity));
+				if(app.getOrder().getSummOrder()/100 < Integer.parseInt(app.getVendor().getMinimalPriceCents())/100)
+					app.showMessage(activity, getString(R.string.warning), app.getVendor().getMobileMinimalAlert(), getString(R.string.ok), null, null, false);
+				else
+					addFragment(new OrderFragment(activity));
+			}
+		});
+		grayLayout.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				app.showMessage(activity, getString(R.string.warning), app.getVendor().getMobileMinimalAlert(), getString(R.string.ok), null, null, false);
 			}
 		});
 	}
     
+	public void updateCurrentFragment() {
+		app.getFragmentCache().get(0).updateFragment();
+	}
+	
 	public void showPicker(final Product product) {
 		LayoutInflater factory = LayoutInflater.from(activity);
         final View v = factory.inflate(R.layout.picker_dialog, null);
         final NumberPicker np = (NumberPicker) v.findViewById(R.id.picker);
-        np.setMaxValue(100);
-        np.setMinValue(1);
+        np.setMaxValue(10);
+        np.setMinValue(0);
         np.setValue(AppApplication.getInstance().getOrder().getCountOfProduct(product.getId()));
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		builder.setInverseBackgroundForced(false);
@@ -147,7 +180,12 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 				Log.e("ShowPicker tap", "product: "+product);
 				Log.e("ShowPicker tap", "order: "+AppApplication.getInstance().getOrder());
 
-				AppApplication.getInstance().getOrder().changeCount(product, np.getValue());
+				if(np.getValue() == 0) {
+					AppApplication.getInstance().getOrder().removeProduct(product);
+					product.setSelected(false);
+				} else {
+					AppApplication.getInstance().getOrder().changeCount(product, np.getValue());
+				}
 				app.getFragmentCache().get(0).updateFragment();
 				activity.updateView();
 				dialog.cancel();
@@ -176,11 +214,15 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 			case R.id.about:
-					showAbout();
+//					showAbout();
+					startActivity(new Intent(activity, AboutActivity.class));
 				break;
 			case android.R.id.home:
 					finish();
 				break;
+			case R.id.update:
+				(new GetDataTask(this, this, false)).execute();
+			break;
 		}
 		return true;
 	}    
@@ -207,8 +249,18 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 
     
 	public void resetFragmentCache() {
-		app.setFragmentCache(new LinkedList<CommonFragment>());
-		addFragment(new ListPageFragment(this));
+		app.setOrder(new Order());
+		for(CategoryList cat: app.getProductList())
+			for(Product prod: cat.getList())
+				prod.setSelected(false);
+		while(app.getFragmentCache().size() > 1) {
+			removeFragment(0);
+		}
+		System.gc();
+	}
+	
+	public void showToastMessage(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
 
 	public void addFragment(CommonFragment fragment) {
@@ -247,8 +299,20 @@ public class CommonActivity extends FragmentActivity implements LoadListener{
 	}
 
 	@Override
-	public void onLoadComplite() {
-		addFragment(new ListPageFragment(this));
+	public void onLoadComplite(String string) {
+		if(app.getFragmentCache().size() > 0) {
+			Log.e(TAG, "AFTER UPDATE 1");
+			updateView();
+			Log.e(TAG, "AFTER UPDATE 2");
+			setUpActionBarButtons();
+			Log.e(TAG, "AFTER UPDATE 3");
+			for(CommonFragment fr: app.getFragmentCache()) {
+				Log.e(TAG, "AFTER UPDATE 4  "+fr);
+				fr.updateDataAndFragment();
+			}
+			Log.e(TAG, "AFTER UPDATE 5");
+		} else 
+			addFragment(new ListPageFragment(this));
 	}
     
 	public void startProgressDialog() {

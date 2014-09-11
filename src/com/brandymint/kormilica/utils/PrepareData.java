@@ -35,6 +35,6 @@ public class PrepareData extends AsyncTask<String, String, String> {
 		super.onPostExecute(result);
 		if(activity != null)
 			activity.stopProgressDialog();
-		loadListener.onLoadComplite();
+		loadListener.onLoadComplite(null);
 	}
 }

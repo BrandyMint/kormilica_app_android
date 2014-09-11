@@ -37,6 +37,7 @@ public class AppApplication extends Application {
 	private ArrayList<CategoryList> productList;
 	private HashMap<String, Product> productMap;
 	private Order order;
+	private CommonActivity activity;
 
 	private Vendor vendor;
 	private BitmapCache bitmapCache;
@@ -57,7 +58,7 @@ public class AppApplication extends Application {
 	
 	public void showMessage(final Activity activity, String header, String message, String positiveLabel, String negativeLabel, final Intent positiveIntent, final boolean isExitWithNegativeButton)
     {
-		AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, 0));
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		builder.setMessage(message);
 		builder.setTitle(header);
 		builder.setCancelable(false);
@@ -197,5 +198,13 @@ public class AppApplication extends Application {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+
+	public CommonActivity getActivity() {
+		return activity;
+	}
+
+	public void setActivity(CommonActivity activity) {
+		this.activity = activity;
 	}
 }

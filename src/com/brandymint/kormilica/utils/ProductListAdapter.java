@@ -13,6 +13,7 @@ import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.data.Order;
 import com.brandymint.kormilica.data.Product;
+import com.brandymint.kormilica.fragments.DetailsFragment;
 
 public class ProductListAdapter extends BaseAdapter {
 		private ArrayList<Product> listData;
@@ -64,14 +65,15 @@ public class ProductListAdapter extends BaseAdapter {
 				greenButton.setVisibility(View.INVISIBLE);
 				blueButton.setVisibility(View.VISIBLE);
 			}
-			price.setText(item.getPriceCents() +"  " +item.getPriceCurrency());
+			price.setText(Integer.parseInt(item.getPriceCents())/100 +"  " +item.getPriceCurrency());
 			if(item.getImageUrl() != null) {
 				imView.setTag(item.getImageUrl());
-//				AppApplication.getInstance().getBitmapCache().loadImage(imView, true);
+				AppApplication.getInstance().getBitmapCache().loadImage(imView, true);
 			}
 			greenButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					activity.addFragment(new DetailsFragment(activity, item));
 				}
 			});
 			blueButton.setOnClickListener(new View.OnClickListener() {

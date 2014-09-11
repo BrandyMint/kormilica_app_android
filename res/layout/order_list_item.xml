@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
+    android:id="@+id/item"
     android:layout_height="wrap_content"
     android:orientation="vertical"
 	android:paddingTop="5dp"
@@ -42,7 +43,7 @@
 
         <FrameLayout android:layout_gravity="center|left"
             android:background="@drawable/green_button_selector"
-			android:layout_weight="1.4"
+			android:layout_weight="1.0"
 			android:paddingTop="5dp"
 			android:paddingBottom="5dp"
             android:id="@+id/button"
@@ -54,7 +55,14 @@
         	    android:layout_width="fill_parent"
             	android:layout_height="fill_parent">
     		
-	          	<TextView android:id="@+id/count"
+				<Spinner android:id="@+id/spinner"
+					android:layout_gravity="center_vertical|center_horizontal"
+					android:gravity="center_vertical|center_horizontal"
+    				android:layout_width="wrap_content"
+					android:paddingRight="20dp"
+	   				android:layout_height="wrap_content" />
+	    	    
+				<!--TextView android:id="@+id/count"
 					android:textColor="#ffffff"
 					android:textSize="13dp"
 					android:layout_weight="1"
@@ -62,7 +70,7 @@
 					android:layout_gravity="center_vertical|center_horizontal"
 					android:gravity="center_vertical|center_horizontal"
 					android:layout_width="fill_parent"
-    				android:layout_height="wrap_content"/>
+    				android:layout_height="wrap_content"/-->
 
     			<TextView android:layout_width="1dp" 
     			    android:layout_height="fill_parent"

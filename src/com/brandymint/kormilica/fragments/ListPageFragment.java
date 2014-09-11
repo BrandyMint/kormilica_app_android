@@ -106,8 +106,16 @@ public class ListPageFragment extends CommonFragment {
 
 	@Override
 	public void updateFragment() {
-		for(int i = 0; i < mAdapter.getCount(); i ++)
+    	for(int i = 0; i < mAdapter.getCount(); i ++)
         	if(screens[i] != null)
             	screens[i].updateFragment();
+	}
+
+
+	@Override
+	public void updateDataAndFragment() {
+        mAdapter = new MyAdapter(activity.getSupportFragmentManager());
+        mPager.setAdapter(mAdapter);
+    	mPager.setCurrentItem(0);  
 	}
 }

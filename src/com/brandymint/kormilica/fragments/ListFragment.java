@@ -17,6 +17,7 @@ public class ListFragment extends CommonFragment {
 	private CommonActivity activity;
 	private ProductListAdapter adapter;
 	private ListView listView;
+	private CategoryList catList;
 
 	public ListFragment() {
 		super();
@@ -25,6 +26,7 @@ public class ListFragment extends CommonFragment {
 	public ListFragment(CommonActivity activity, CategoryList catList) {
 		super(activity);
 		this.activity = activity;
+		this.catList = catList;
 		adapter = new ProductListAdapter(activity, catList.getList());
 	}
 
@@ -46,5 +48,17 @@ public class ListFragment extends CommonFragment {
 	@Override
 	public void updateFragment() {
 		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void updateDataAndFragment() {
+		adapter = new ProductListAdapter(activity, catList.getList());
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				activity.addFragment(new DetailsFragment(activity, adapter.getItem(arg2)));
+			}
+        });
 	}
 }

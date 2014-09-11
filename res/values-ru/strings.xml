@@ -1,0 +1,45 @@
+<resources>
+
+    <string name="app_name">Кормилица</string>
+    <string name="please_wait">Ожидайте...</string>
+    <string name="wrong_data">Ошибка получения данных с сервера.</string>
+    <string name="action_settings">Настройки</string>
+    <string name="exit">Выход</string>
+    <string name="ok">Ок</string>
+    <string name="cancel">Отмена</string>
+    <string name="version">Версия</string>
+    <string name="warning">Внимание</string>
+    <string name="error">Ошибка</string>
+    <string name="minimal_summ">Минимальная сумма заказа - </string>
+    <string name="itogo">Итого</string>
+    <string name="in_order">В заказе</string>
+    <string name="to_order">В заказ</string>
+    <string name="add_to_order">Добавить в заказ</string>
+    <string name="select_count">Пожалуйста укажите количество:</string>
+    <string name="_pcs">/шт.</string>
+    <string name="pcs">шт.</string>
+    <string name="your_order">Ваш заказ</string>
+    <string name="delivery">Доставка</string>
+    <string name="contact_to_us">Свяжитесь с нами</string>
+    <string name="call">Позвонить</string>
+    <string name="returned">Вернуться обратно в магазин</string>
+    <string name="phone_number">+6 666 666 66 66</string>
+    <string name="save">Сохранить</string>
+    <string name="phone">Телефон:</string>
+    <string name="city">Город:</string>
+    <string name="address">Адрес:</string>
+    <string name="about">О нас</string>
+    <string name="about_text">Разного рода информация о разработчиках, приложении, о возвожностях как разработчиков так и приложения. \n\nКроме того контактная информация\n\nи адрес сайта.   </string>
+    <string name="address_details">Улица, дом, квартира</string>
+    <string name="deliver_order">Доставить заказ</string>
+    <string name="updated_successfull">База данных была успешно обновлена.</string>
+    <string name="empty_phone">Поле ввода телефона пусто.</string>
+    <string name="empty_city">Поле ввода города пусто.</string>
+    <string name="empty_address">Поле ввода адреса пусто.</string>
+        
+    <string name="prepare_order">Оформить заказ</string>
+    <string name="free_shipping">Бесплатная доставка при заказе от</string>
+    <string name="error_netw_connection">Нет соединения. Пожалуйста проверьте настройки сети или попробуйте позже.</string>
+			
+    
+</resources>

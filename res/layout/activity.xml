@@ -1,9 +1,12 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-	android:background="#ffffff"
-	android:orientation="vertical"
-    android:layout_height="fill_parent" 
-  	android:layout_width="fill_parent">
+   	android:layout_height="fill_parent" 
+	android:layout_width="fill_parent">
+
+	<LinearLayout android:background="#ffffff"
+		android:orientation="vertical"
+    	android:layout_height="fill_parent" 
+  		android:layout_width="fill_parent">
 
 	<FrameLayout android:id="@+id/activity_container"
 		android:layout_weight="1"
@@ -31,15 +34,17 @@
    	</FrameLayout>
 	
 	<FrameLayout android:layout_width="fill_parent"
+	    android:background="@drawable/blue_bottom_bar"
+	    android:id="@+id/bottom_layout"
 		android:layout_height="wrap_content">
 	
-		<LinearLayout android:background="@drawable/blue_bottom_bar"
+		<LinearLayout android:background="@drawable/prepare_bg_selector"
 		    android:id="@+id/blue_layout"
 			android:orientation="horizontal"
     		android:layout_height="fill_parent" 
   			android:layout_width="fill_parent">
 			
-			<LinearLayout android:background="@drawable/blue_bottom_bar"
+			<LinearLayout 
 				android:layout_weight="1"
 				android:layout_gravity="center|center"
 				android:gravity="center|center"
@@ -69,7 +74,6 @@
 		    			
 	  		<TextView android:id="@+id/prepare_order"
 				android:layout_weight="1"
-				android:background="@drawable/prepare_bg_selector"
 				android:gravity="center|center"
 				android:text="@string/prepare_order"
 				android:textColor="#ffffff"
@@ -117,4 +121,7 @@
 		</FrameLayout> 
 					
 	</FrameLayout>
-</LinearLayout>
+	</LinearLayout>
+
+
+</FrameLayout>

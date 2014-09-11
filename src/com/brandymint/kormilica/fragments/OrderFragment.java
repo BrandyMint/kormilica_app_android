@@ -44,7 +44,8 @@ public class OrderFragment extends CommonFragment {
 		listView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				activity.addFragment(new DetailsFragment(activity, adapter.getItem(arg2)));
+				if(!adapter.getItem(arg2).getId().equals("temp"))
+					activity.addFragment(new DetailsFragment(activity, adapter.getItem(arg2)));
 			}
         });
 		activity.updateView();
@@ -54,5 +55,18 @@ public class OrderFragment extends CommonFragment {
 	@Override
 	public void updateFragment() {
 		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void updateDataAndFragment() {
+		adapter = new OrderAdapter(activity, AppApplication.getInstance().getOrder().getProductList());
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				if(!adapter.getItem(arg2).getId().equals("temp"))
+					activity.addFragment(new DetailsFragment(activity, adapter.getItem(arg2)));
+			}
+        });
 	}
 }

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:id="@+id/common_layout"
     android:orientation="vertical"
    	android:background="#ffffff">
  
@@ -79,16 +80,30 @@
 			android:layout_width="fill_parent"
     		android:layout_height="wrap_content"/>
 
-       	<TextView android:background="@drawable/green_button_bg"
-       	    android:id="@+id/green_button"
-			android:textColor="#ffffff"
-			android:textSize="22dp"
-       		android:text="@string/in_order"
-			android:layout_gravity="center_vertical|center_horizontal"
-			android:gravity="center_vertical|center_horizontal"
-			android:layout_width="fill_parent"
-    		android:layout_height="wrap_content"/>
-         			
+       	
+	    <LinearLayout android:layout_gravity="center|left"
+	        android:id="@+id/green_button"
+    	    android:background="@drawable/green_button_bg"
+    	    android:orientation="horizontal"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content">
+				
+        	<TextView 
+				android:textColor="#ffffff"
+				android:textSize="22dp"
+       			android:text="@string/in_order"
+		    	android:layout_weight="1"
+				android:layout_gravity="center_vertical|center_horizontal"
+				android:gravity="center_vertical|center_horizontal"
+				android:layout_width="fill_parent"
+    			android:layout_height="wrap_content"/>
+        		
+			<Spinner android:id="@+id/spinner"
+    			android:layout_width="wrap_content"
+				android:paddingRight="20dp"
+	   			android:layout_height="wrap_content" />
+				        
+        </LinearLayout>		
     </FrameLayout>
     		
     <TextView android:id="@+id/description"

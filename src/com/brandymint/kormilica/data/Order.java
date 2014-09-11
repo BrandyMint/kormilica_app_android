@@ -18,7 +18,6 @@ public class Order {
 	public Order(String products) {
 		//String myString = "[ { \"1\":33 }, { \"2\":30 }, { \"3\":15 }, { \"4\":23 }, { \"9\":17 }, { \"U\":2 }, { \"V\":22 }, { \"W\":1 }, { \"X\":35 }, { \"Y\":6 }, { \"Z\":19 } ]";
 		//HashMap<String, Integer> map = convertToHashMap(myString);
-		
 	}
 	
 	public String getProductsAsString() {
@@ -29,6 +28,13 @@ public class Order {
 		Log.e("ORDER", "Add product to order:  "+ product);
 		listProducts.add(product);
 		mapCounts.put(product.getId(), ""+1);
+		calculateSumm();
+	}
+
+	public void removeProduct(Product product) {
+		Log.e("ORDER", "Add product to order:  "+ product);
+		listProducts.remove(product);
+		mapCounts.remove(product.getId());
 		calculateSumm();
 	}
 	
