@@ -22,8 +22,30 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 
+import org.acra.*;
+import org.acra.annotation.*;
+
+@ReportsCrashes(
+        formKey = "",
+        formUri = "http://acra.icfdev.ru/acra-kormilica/_design/acra-storage/_update/report",
+        reportType = org.acra.sender.HttpSender.Type.JSON,
+        httpMethod = org.acra.sender.HttpSender.Method.PUT,
+        formUriBasicAuthLogin="kormilica",
+        formUriBasicAuthPassword="dfg8Kmdybc",
+        mode = ReportingInteractionMode.TOAST,
+        resToastText = R.string.crash_toast_text, 
+        additionalDropBoxTags = { "" }, additionalSharedPreferences = { "" }, applicationLogFile = "", applicationLogFileLines = 0, connectionTimeout = 0, 
+        customReportContent = { ReportField.APP_VERSION_CODE, ReportField.APP_VERSION_NAME, ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL, ReportField.CUSTOM_DATA, ReportField.STACK_TRACE, ReportField.LOGCAT}, 
+        deleteOldUnsentReportsOnApplicationStart = false, 
+        deleteUnapprovedReportsOnApplicationStart = false, disableSSLCertValidation = false, dropboxCollectionMinutes = 0, 
+        excludeMatchingSettingsKeys = { "" }, excludeMatchingSharedPreferencesKeys = { "" }, forceCloseDialogAfterToast = false, 
+        googleFormUrlFormat = "", includeDropBoxSystemTags = false, logcatArguments = { "" }, logcatFilterByPid = false, mailTo = "",
+        maxNumberOfRequestRetries = 0, resDialogCommentPrompt = 0, resDialogEmailPrompt = 0, resDialogIcon = 0, resDialogNegativeButtonText = 0, 
+        resDialogOkToast = 0, resDialogPositiveButtonText = 0, resDialogText = 0, resDialogTitle = 0, resNotifIcon = 0, resNotifText = 0,
+        resNotifTickerText = 0, resNotifTitle = 0, sendReportsInDevMode = false, sharedPreferencesMode = 0, sharedPreferencesName = "", 
+        socketTimeout = 60000
+        )
 public class AppApplication extends Application {
 	
 	private static final String TAG = "AppApplication";
