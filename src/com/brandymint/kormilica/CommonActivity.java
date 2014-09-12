@@ -283,9 +283,9 @@ public class CommonActivity extends FragmentActivity implements LoadListener {
 	}
 
 	public void finish() {
-		if(app.getFragmentCache().size() > 1)
+		if(app.getFragmentCache().size() > 0)
 			removeFragment(0);
-		else
+		if(app.getFragmentCache() == null || app.getFragmentCache().size() == 0)
 			super.finish();
 	}
 
