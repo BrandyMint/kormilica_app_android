@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="product_count">
+        <item>Удалить</item>
+        <item>1 шт.</item>
+        <item>2 шт.</item>
+        <item>3 шт.</item>
+        <item>4 шт.</item>
+        <item>5 шт.</item>
+        <item>6 шт.</item>
+        <item>7 шт.</item>
+        <item>8 шт.</item>
+        <item>9 шт.</item>
+        <item>10 шт.</item>
+    </string-array>
+
+</resources>

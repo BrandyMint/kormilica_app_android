@@ -68,7 +68,7 @@ public class SendOrderTask extends AsyncTask<String, String, String> {
 		  	JSONObject user = new JSONObject();
 			user.put("phone", arg[0]);
 			user.put("address", arg[2]);
-			user.put("comment", "Тестовый заказ");
+			user.put("comment", "Test order");
 
 		  	JSONStringer json = new JSONStringer().object() 
 					.key("user").value(user)

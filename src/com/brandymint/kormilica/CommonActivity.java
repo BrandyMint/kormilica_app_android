@@ -49,13 +49,6 @@ public class CommonActivity extends FragmentActivity implements LoadListener {
         app = AppApplication.getInstance();
         app.setActivity(this);
         actionBar = getActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(0xff999999));
-        int actionBarTitleId = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
-        if (actionBarTitleId > 0) {
-            TextView title = (TextView) findViewById(actionBarTitleId);
-            if (title != null)
-                title.setTextColor(Color.BLACK);
-        }
 		if(!app.isOnline()) {
 			app.showMessage(this, getString(R.string.warning), getString(R.string.error_netw_connection), getString(R.string.action_settings), getString(R.string.exit), new Intent(android.provider.Settings.ACTION_SETTINGS), true);
 			return;
@@ -283,10 +276,8 @@ public class CommonActivity extends FragmentActivity implements LoadListener {
 	
 	private void setUpActionBarButtons() {
 		if(app.getFragmentCache().size() > 1) {
-			actionBar.setHomeButtonEnabled(true);
 			actionBar.setDisplayHomeAsUpEnabled(true);
 		} else {
-			actionBar.setHomeButtonEnabled(false);
 			actionBar.setDisplayHomeAsUpEnabled(false);
 		}
 	}

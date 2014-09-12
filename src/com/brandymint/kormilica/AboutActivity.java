@@ -4,6 +4,7 @@ import com.brandymint.kormilica.utils.GetDataTask;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ public class AboutActivity extends Activity {
         TextView update = (TextView) findViewById(R.id.update);
         
         title.setText(app.getVendor().getMobileSubject());
-        text.setText(app.getVendor().getMobileDescription());
+        text.setText(Html.fromHtml(app.getVendor().getMobileDescription()));
         String dopString = "vendor key - "+ app.getVendor().getKey()+"\n"
         		+"minimal price - "+app.getVendor().getMinimalPriceCents()+"\n"
         		+"delivery price - "+app.getVendor().getDeliveryPriceCents()+"\n";

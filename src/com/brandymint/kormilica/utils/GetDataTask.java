@@ -3,15 +3,11 @@ package com.brandymint.kormilica.utils;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.brandymint.kormilica.AppApplication;
 import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
@@ -20,7 +16,6 @@ import com.brandymint.kormilica.data.Category;
 import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.data.Vendor;
 import com.brandymint.kormilica.db.DBHelper;
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -43,9 +38,11 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 	private ArrayList<AbstractData> productList;
 	private ArrayList<AbstractData> categoryList;
 	private ArrayList<AbstractData> vendorList;
+	private String firstStart;
 	private boolean showLoader;
 
 	public GetDataTask(CommonActivity activity, LoadListener loadListener, boolean showLoader) {
+		firstStart = AppApplication.getInstance().loadPreference(AppApplication.IS_FIRST_START);
 		this.activity = activity;
 		this.loadListener = loadListener;
 		this.showLoader = showLoader;
@@ -53,9 +50,8 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 	
 	private String getData(String[] arg) {
 		Log.d(TAG, "getData start");
-		String firstStart = AppApplication.getInstance().loadPreference(AppApplication.IS_FIRST_START);
-		try
-		{	
+		HttpURLConnection connection = null;
+		try {	
     		StringBuffer stb = new StringBuffer();
 			if(firstStart == null || Boolean.parseBoolean(firstStart)) {
 			    InputStream json=activity.getAssets().open("default.json");
@@ -67,15 +63,12 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 			    in.close();				
 			} else {
 				String url = BASE_URL + API_VERSION + "/bundles.json";
-				HttpClient httpclient = new DefaultHttpClient();
-			    HttpGet httpget = new HttpGet(url);
-			    httpget.setHeader("X-Vendor-Key", VENDOR_KEY);	
-			    httpget.setHeader("Accept","application/xml; charset=utf-8");
-			    httpget.setHeader("Content-Type","application/xml; charset=utf-8");	
-			    
-			    HttpResponse response = httpclient.execute(httpget);
-	    		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
-	    		String str;
+				connection = (HttpURLConnection) (new URL(url)).openConnection();
+	            connection.setRequestProperty("X-Vendor-Key", VENDOR_KEY);
+	            connection.setRequestProperty("Accept","application/json; charset=utf-8");
+	            connection.setRequestProperty("Content-Type","application/json; charset=utf-8");
+	    		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+				String str;
 	    		while((str = reader.readLine()) != null) {
 	    			stb.append(str);
 	    			stb.append("\n");
@@ -110,7 +103,11 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 		} catch (Exception ex) {
 			Log.e(TAG, "getData error: "+ex);
 			return "getData error: "+ex;
-		}
+		} finally {
+			if(connection != null)
+				connection.disconnect();
+	    }
+
 	}
 	
 	@Override
@@ -133,7 +130,6 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 		dbHelper.updateVendorTable(vendorList);
 	
 		AppApplication.getInstance().fillAppData();
-		AppApplication.getInstance().savePreference(AppApplication.IS_FIRST_START, ""+false);
 		return resultString;
 	}
 
@@ -146,7 +142,9 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 			AppApplication.getInstance().showMessage(activity, activity.getString(R.string.error), result, activity.getString(R.string.ok), null, null, false);
 		else {	
 			loadListener.onLoadComplite(null);
-			activity.showToastMessage(activity.getString(R.string.updated_successfull));
+			if(firstStart != null && !Boolean.parseBoolean(firstStart)) 
+				activity.showToastMessage(activity.getString(R.string.updated_successfull));
+			AppApplication.getInstance().savePreference(AppApplication.IS_FIRST_START, ""+false);
 		}
 	}
 }
