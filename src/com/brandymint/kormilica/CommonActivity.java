@@ -16,9 +16,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -270,8 +267,9 @@ public class CommonActivity extends FragmentActivity implements LoadListener {
 		app.getFragmentCache().remove(ind);
 		app.checkFragmentCacheSize();
 		setUpActionBarButtons();
-		app.getFragmentCache().get(0).updateFragment();
 		updateView();
+		if(app.getFragmentCache().size() > 0)
+			app.getFragmentCache().get(0).updateFragment();
 	}
 	
 	private void setUpActionBarButtons() {
