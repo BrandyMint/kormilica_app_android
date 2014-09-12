@@ -44,5 +44,7 @@
 			
 	<string name="author">by Sergey Mashukov</string>
 	<string name="differente_info">It is very fine application. To read more, please go to official web site. :)</string>
+	<string name="crash_toast_text">Sorry. Application was crashed, but a report has been sent to developers to help fix the issue. </string>
+	
     
 </resources>
