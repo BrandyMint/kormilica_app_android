@@ -1,8 +1,8 @@
 package com.brandymint.kormilica.fragments;
 
-import com.brandymint.kormilica.AppApplication;
-import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
+import com.brandymint.kormilica.data.ProductData;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,25 +17,21 @@ import android.view.ViewGroup;
 public class ListPageFragment extends CommonFragment {
 	
 	private static final String TAG = "CommonActivity";
-    public static final int COUNT_OF_PAGE   = 3;
-
     private MyAdapter mAdapter;
     private ViewPager mPager;
-    private CommonActivity activity;
     private CommonFragment []  screens;
 	protected ProgressDialog progressDialog; 
-	private AppApplication app;
 
-
-	public ListPageFragment(CommonActivity activity) {
-		this.activity = activity;
-        mAdapter = new MyAdapter(activity.getSupportFragmentManager());
-        app = AppApplication.getInstance();
+	public ListPageFragment() {	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+        mAdapter = new MyAdapter(getActivity().getSupportFragmentManager());
         screens = new CommonFragment[mAdapter.getCount()];
 	}
-	
-	
-    @Override
+
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.common, container, false);
         mPager = (ViewPager) view.findViewById(R.id.fragment);
@@ -67,21 +63,20 @@ public class ListPageFragment extends CommonFragment {
         }
     	@Override
         public int getCount() {
-            return app.getProductList().size();
+            return ProductData.getInstance().getProductList().size();
         }
  
         @Override
         public Fragment getItem(int position) {
         	if(screens[position] == null)
-        		screens[position] = new ListFragment(activity, app.getProductList().get(position)); 
+        		screens[position] = new ListFragment(ProductData.getInstance().getProductList().get(position)); 
         	return screens[position];
         }
         
         @Override
         public CharSequence getPageTitle(int position) {
-        	return app.getProductList().get(position).getTitle();
+        	return ProductData.getInstance().getProductList().get(position).getTitle();
         }        
-        
 
 		@Override
 		public void destroyItem(View arg0, int arg1, Object arg2) {
@@ -109,13 +104,5 @@ public class ListPageFragment extends CommonFragment {
     	for(int i = 0; i < mAdapter.getCount(); i ++)
         	if(screens[i] != null)
             	screens[i].updateFragment();
-	}
-
-
-	@Override
-	public void updateDataAndFragment() {
-        mAdapter = new MyAdapter(activity.getSupportFragmentManager());
-        mPager.setAdapter(mAdapter);
-    	mPager.setCurrentItem(0);  
 	}
 }

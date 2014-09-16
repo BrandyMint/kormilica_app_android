@@ -9,15 +9,16 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.brandymint.kormilica.AppApplication;
-import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.data.AbstractData;
 import com.brandymint.kormilica.data.Category;
 import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.data.Vendor;
 import com.brandymint.kormilica.db.DBHelper;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class GetDataTask extends AsyncTask<String, String, String> {
@@ -26,35 +27,35 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 	private static final String BASE_URL		 = "http://api.kormilica.info/";
 	private static final String API_VERSION		 = "v1";
 	private static final String VENDOR_KEY		 = "467abe2e7d33e6455fe905e879fd36be";
-//	private static final String VENDOR_KEY		 = "45751f0d53a336ffb5fb91447c165fc9";
-	
 	private static final String KEY_VENDOR		 = "vendor";
 	private static final String KEY_CATEGORIES	 = "categories";
 	private static final String KEY_PRODUCTS	 = "products";
 
-	private CommonActivity activity;
+	private Context context;
 	private LoadListener loadListener;
-	private String resultString;
 	private ArrayList<AbstractData> productList;
 	private ArrayList<AbstractData> categoryList;
 	private ArrayList<AbstractData> vendorList;
 	private String firstStart;
-	private boolean showLoader;
 
-	public GetDataTask(CommonActivity activity, LoadListener loadListener, boolean showLoader) {
+	public GetDataTask() {
 		firstStart = AppApplication.getInstance().loadPreference(AppApplication.IS_FIRST_START);
-		this.activity = activity;
-		this.loadListener = loadListener;
-		this.showLoader = showLoader;
+	}
+
+	public GetDataTask(Context context) {
+		firstStart = AppApplication.getInstance().loadPreference(AppApplication.IS_FIRST_START);
+		this.context = context;
+		loadListener = (LoadListener)context;
 	}
 	
 	private String getData(String[] arg) {
-		Log.d(TAG, "getData start");
+		Log.e(TAG, "getData start");
 		HttpURLConnection connection = null;
 		try {	
     		StringBuffer stb = new StringBuffer();
-			if(firstStart == null || Boolean.parseBoolean(firstStart)) {
-			    InputStream json=activity.getAssets().open("default.json");
+			if(context != null && (firstStart == null || Boolean.parseBoolean(firstStart))) {
+				Log.e(TAG, "getData start 1");
+			    InputStream json = context.getAssets().open("default.json");
 			    BufferedReader in = new BufferedReader(new InputStreamReader(json, "UTF-8"));
 			    String str;
 			    while ((str=in.readLine()) != null) {
@@ -62,6 +63,7 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 			    }
 			    in.close();				
 			} else {
+				Log.e(TAG, "getData start 2");
 				String url = BASE_URL + API_VERSION + "/bundles.json";
 				connection = (HttpURLConnection) (new URL(url)).openConnection();
 	            connection.setRequestProperty("X-Vendor-Key", VENDOR_KEY);
@@ -75,7 +77,7 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 	    		}
 	    		reader.close();
 			}
-    		String answer = stb.toString();
+    		String answer = stb.toString().replaceAll("RUB", "р.");
     		Log.e(TAG, "answer: "+answer);
     		categoryList = new ArrayList<AbstractData>();
     		vendorList = new ArrayList<AbstractData>();
@@ -111,39 +113,33 @@ public class GetDataTask extends AsyncTask<String, String, String> {
 	}
 	
 	@Override
-	protected void onPreExecute() {
-		if(activity != null && showLoader)
-			activity.startProgressDialog();
-	}
-
-	@Override
 	protected String doInBackground(String... arg) {
-		int resultCode = -1; 
 		String err = getData(arg);
-		if(err != null)
-			return activity.getString(R.string.wrong_data);
-		Log.d(TAG, "doInBackground result:  "+resultCode);
-
-		DBHelper dbHelper = AppApplication.getInstance().getDbHelper();
+		if(err != null && context != null)
+			return context.getString(R.string.wrong_data);
+		DBHelper dbHelper = new DBHelper(AppApplication.getInstance());
 		dbHelper.updateCategoryTable(categoryList);
 		dbHelper.updateProductTable(productList);
 		dbHelper.updateVendorTable(vendorList);
-	
 		AppApplication.getInstance().fillAppData();
-		return resultString;
+//		dbHelper.close();
+//		dbHelper = null;
+		return null;
 	}
 
 	@Override
     protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		Log.d(TAG, "onPostExecute:  "+result);
-		activity.stopProgressDialog();
-		if(result != null && showLoader)
-			AppApplication.getInstance().showMessage(activity, activity.getString(R.string.error), result, activity.getString(R.string.ok), null, null, false);
-		else {	
+		if(loadListener != null)
 			loadListener.onLoadComplite(null);
+		if(result != null)
+			if(context != null)
+				Toast.makeText(context, context.getString(R.string.error)+": "+result, Toast.LENGTH_LONG).show();
+		else {	
 			if(firstStart != null && !Boolean.parseBoolean(firstStart)) 
-				activity.showToastMessage(activity.getString(R.string.updated_successfull));
+				if(context != null)
+					Toast.makeText(context, context.getString(R.string.updated_successfull), Toast.LENGTH_LONG).show();
 			AppApplication.getInstance().savePreference(AppApplication.IS_FIRST_START, ""+false);
 		}
 	}

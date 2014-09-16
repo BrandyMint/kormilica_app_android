@@ -1,18 +1,13 @@
 package com.brandymint.kormilica;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-
 import com.brandymint.kormilica.data.Category;
 import com.brandymint.kormilica.data.CategoryList;
 import com.brandymint.kormilica.data.Order;
 import com.brandymint.kormilica.data.Product;
+import com.brandymint.kormilica.data.ProductData;
 import com.brandymint.kormilica.data.Vendor;
 import com.brandymint.kormilica.db.DBHelper;
-import com.brandymint.kormilica.fragments.CommonFragment;
-import com.brandymint.kormilica.utils.BitmapCache;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -22,7 +17,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.util.Log;
-
 import org.acra.*;
 import org.acra.annotation.*;
 
@@ -41,19 +35,10 @@ public class AppApplication extends Application {
 	private static final String TAG = "AppApplication";
 	public static final String PREFERENCE_NAME = "KormilicaApplication";
 	public static final String IS_FIRST_START = "IsFirstStart";
-	public static final int MAX_FRAGMENT_CACHE_SIZE = 10;
 
-	private static AppApplication instance;
-	private LinkedList<CommonFragment> fragmentCache;
-	private ArrayList<Category> categoryList;
-	private ArrayList<CategoryList> productList;
-	private HashMap<String, Product> productMap;
 	private Order order;
-	private CommonActivity activity;
-
 	private Vendor vendor;
-	private BitmapCache bitmapCache;
-	private DBHelper dbHelper;
+	private static AppApplication instance;
 	
 	public static AppApplication getInstance() {
 		return instance;
@@ -61,12 +46,33 @@ public class AppApplication extends Application {
 
 	@Override
 	public void onCreate() {
-		ACRA.init(this);
+//		ACRA.init(this);
 		super.onCreate();
 		instance = this;
-	    fragmentCache = new LinkedList<CommonFragment>();
-	    bitmapCache = new BitmapCache();
-	    dbHelper = new DBHelper(this);
+	}
+	
+	public void fillAppData() {
+		ProductData prodData = ProductData.getInstance();
+		DBHelper dbHelper = new DBHelper(this);
+		ArrayList<Vendor> list = dbHelper.readVendorTable();
+		setVendor(list.get(0));
+		prodData.setCategoryList(dbHelper.readCategoryTable());
+		ArrayList<Product> tempList = dbHelper.readProductTable();
+		ArrayList<CategoryList> productList = new ArrayList<CategoryList>();
+		for(Category category : prodData.getCategoryList()) {
+			CategoryList catList = new CategoryList(category.getName());
+			for(Product prod: tempList) {
+				if(category.getId().equals(prod.getCategoryId())) {
+					catList.addItem(prod);
+				}
+			}
+			if(catList.getList().size() > 0)
+				productList.add(catList);
+		}
+		prodData.setProductList(productList);
+		dbHelper.close();
+		dbHelper = null;
+		Log.e(TAG, "fillAppData:  read product compleate");
 	}
 	
 	public void showMessage(final Activity activity, String header, String message, String positiveLabel, String negativeLabel, final Intent positiveIntent, final boolean isExitWithNegativeButton)
@@ -97,29 +103,6 @@ public class AppApplication extends Application {
 		alert.show();
     }
 
-	public void fillAppData() {
-		Log.e(TAG, "fillAppData:  read vendor");
-		ArrayList<Vendor> list = dbHelper.readVendorTable();
-		setVendor(list.get(0));
-		Log.e(TAG, "fillAppData:  read vendor:  "+getVendor());
-
-		Log.e(TAG, "fillAppData:  read product");
-		setCategoryList(dbHelper.readCategoryTable());
-		ArrayList<Product> tempList = dbHelper.readProductTable();
-		productList = new ArrayList<CategoryList>();
-		for(Category category : getCategoryList()) {
-			CategoryList catList = new CategoryList(category.getName());
-			for(Product prod: tempList) {
-				if(category.getId().equals(prod.getCategoryId())) {
-					catList.addItem(prod);
-				}
-			}
-			if(catList.getList().size() > 0)
-				productList.add(catList);
-		}
-		Log.e(TAG, "fillAppData:  read product compleate");
-//		setOrder(dbHelper.readOrderTable());
-	}
 	
 	public String loadPreference(String preferenceName) {
     	SharedPreferences preference = getSharedPreferences(PREFERENCE_NAME, 0);
@@ -140,63 +123,6 @@ public class AppApplication extends Application {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-	public BitmapCache getBitmapCache() {
-		return bitmapCache;
-	}
-
-	public LinkedList<CommonFragment> getFragmentCache() {
-		return fragmentCache;
-	}
-
-	public DBHelper getDbHelper() {
-		return dbHelper;
-	}
-
-	public void setDbHelper(DBHelper dbHelper) {
-		this.dbHelper = dbHelper;
-	}
-
-	public void setFragmentCache(LinkedList<CommonFragment> fragmentCache) {
-		this.fragmentCache = fragmentCache;
-	}
-	
-	public void checkFragmentCacheSize() {
-       	if(fragmentCache.size() > MAX_FRAGMENT_CACHE_SIZE){
-       		fragmentCache.remove(fragmentCache.size() - 1);
-       		System.gc();
-       	}
-	}
-
-	public ArrayList<CategoryList> getProductList() {
-		return productList;
-	}
-
-	public void setProductList(ArrayList<CategoryList> productList) {
-		this.productList = productList;
-		productMap = new HashMap<String, Product>();
-		for(CategoryList list: productList) {
-			for(Product prod: list.getList()) {
-				productMap.put(prod.getId(), prod);
-			}
-		}
-	}
-
-	public ArrayList<Category> getCategoryList() {
-		return categoryList;
-	}
-
-	public void setCategoryList(ArrayList<Category> categoryList) {
-		this.categoryList = categoryList;
-	}
-
-	public HashMap<String, Product> getProductMap() {
-		return productMap;
-	}
-
-	public void setProductMap(HashMap<String, Product> productMap) {
-		this.productMap = productMap;
-	}
-
 	public Vendor getVendor() {
 		return vendor;
 	}
@@ -211,13 +137,5 @@ public class AppApplication extends Application {
 
 	public void setOrder(Order order) {
 		this.order = order;
-	}
-
-	public CommonActivity getActivity() {
-		return activity;
-	}
-
-	public void setActivity(CommonActivity activity) {
-		this.activity = activity;
 	}
 }

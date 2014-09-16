@@ -16,7 +16,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -34,9 +33,16 @@ public class BitmapCache {
     private HashMap<String, Bitmap> cache;
     private String currUrl = null;
     private ArrayList<DownloaderTask> downloader;
+    private static BitmapCache instance;
     
     
-    public BitmapCache() {
+	public static BitmapCache getInstance() {
+		if(instance == null)
+			instance = new BitmapCache();
+		return instance;
+	}
+    
+    private BitmapCache() {
     	cache = new HashMap<String, Bitmap>();
     	downloader = new ArrayList<DownloaderTask>();
     }

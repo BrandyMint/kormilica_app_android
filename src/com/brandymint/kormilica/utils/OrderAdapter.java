@@ -1,6 +1,7 @@
 package com.brandymint.kormilica.utils;
 
 import java.util.ArrayList;
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,17 +17,19 @@ import com.brandymint.kormilica.AppApplication;
 import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.data.Product;
-import com.brandymint.kormilica.fragments.DetailsFragment;
 
 public class OrderAdapter extends BaseAdapter {
 		private ArrayList<Product> listData;
 		private LayoutInflater inflater;
-		private CommonActivity activity;
+		private EventListener eventListener;
+		private Context context;
 
-		public OrderAdapter(CommonActivity activity, ArrayList<Product> listData) {
+
+		public OrderAdapter(Activity activity, ArrayList<Product> listData) {
 			inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			this.listData = listData;
-			this.activity = activity;
+			context = (Context) activity;
+			eventListener = (EventListener) activity;
 			Product temp = new Product();
 			temp.setId("temp");
 			this.listData.add(temp);
@@ -74,8 +77,8 @@ public class OrderAdapter extends BaseAdapter {
 				final TextView summ = (TextView)view.findViewById(R.id.summ);
 				FrameLayout button = (FrameLayout)view.findViewById(R.id.button);
 				final Spinner spinner = (Spinner)view.findViewById(R.id.spinner);
-			    String[] spinnerItems = activity.getResources().getStringArray(R.array.product_count);
-				ArrayAdapter<CharSequence> adapter = new ArrayAdapter(activity, android.R.layout.simple_spinner_item, spinnerItems); 
+			    String[] spinnerItems = context.getResources().getStringArray(R.array.product_count);
+				ArrayAdapter<CharSequence> adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerItems); 
 		    	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		    	spinner.setAdapter(adapter);
 				if(AppApplication.getInstance().getOrder() != null)
@@ -97,15 +100,13 @@ public class OrderAdapter extends BaseAdapter {
 								summ.setText(sum/100+" "+item.getPriceCurrency());
 							} catch(Exception ex){}
 						}
-						activity.updateView();
-						activity.updateCurrentFragment();
+						eventListener.event(CommonActivity.EVENT_UPDATE_ACTIVITY, null);
 					}
 				});
 
-				name.setText(item.getTitle());
-				price.setText(Integer.parseInt(item.getPriceCents())/100 +"  " +item.getPriceCurrency()+""+activity.getString(R.string._pcs));
-//				count.setText(AppApplication.getInstance().getOrder().getCountOfProduct(item.getId())+""+activity.getString(R.string.pcs));
-				try{
+		    	try{
+					name.setText(item.getTitle());
+					price.setText(Integer.parseInt(item.getPriceCents())/100 +"  " +item.getPriceCurrency()+""+context.getString(R.string._pcs));
 					int sum = Integer.parseInt(item.getPriceCents()) * AppApplication.getInstance().getOrder().getCountOfProduct(item.getId());
 					summ.setText(sum/100+" "+item.getPriceCurrency());
 				} catch(Exception ex){}
@@ -113,16 +114,10 @@ public class OrderAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					if(!item.getId().equals("temp"))
-						activity.addFragment(new DetailsFragment(activity, item));
+						eventListener.event(CommonActivity.EVENT_START_DETAILS_FRAGMENT, item);
 				}
 			});
-/*				button.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						activity.showPicker(item);
-					}
-				});
-*/			}
+			}
 			return view;
 		}
 }

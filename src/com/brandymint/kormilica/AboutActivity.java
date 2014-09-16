@@ -30,7 +30,8 @@ public class AboutActivity extends Activity {
         update.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				(new GetDataTask(app.getActivity(), app.getActivity(), false)).execute();
+				(new GetDataTask()).execute();
+				finish();
 			}
 		});
 	}

@@ -5,6 +5,7 @@ import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.utils.OrderAdapter;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,21 +16,18 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class OrderFragment extends CommonFragment {
 	
-	private CommonActivity activity;
 	private OrderAdapter adapter;
 	private ListView listView;
 
-	public OrderFragment() {
-		super();
+	public OrderFragment() {	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		cleanProdOrderList();
+		adapter = new OrderAdapter(getActivity(), AppApplication.getInstance().getOrder().getProductList());
 	}
 	
-	public OrderFragment(CommonActivity activity) {
-		super(activity);
-		this.activity = activity;
-		cleanProdOrderList();
-		adapter = new OrderAdapter(activity, AppApplication.getInstance().getOrder().getProductList());
-	}
-
 	public void cleanProdOrderList() {
 		for(Product prod: AppApplication.getInstance().getOrder().getProductList())
 			if(prod.getId().equals("temp"))
@@ -45,28 +43,15 @@ public class OrderFragment extends CommonFragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				if(!adapter.getItem(arg2).getId().equals("temp"))
-					activity.addFragment(new DetailsFragment(activity, adapter.getItem(arg2)));
+					eventListener.event(CommonActivity.EVENT_START_DETAILS_FRAGMENT, adapter.getItem(arg2));
 			}
         });
-		activity.updateView();
+		eventListener.event(CommonActivity.EVENT_UPDATE_ACTIVITY, null);
 		return view;
 	}
 
 	@Override
 	public void updateFragment() {
 		adapter.notifyDataSetChanged();
-	}
-
-	@Override
-	public void updateDataAndFragment() {
-		adapter = new OrderAdapter(activity, AppApplication.getInstance().getOrder().getProductList());
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new OnItemClickListener(){
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				if(!adapter.getItem(arg2).getId().equals("temp"))
-					activity.addFragment(new DetailsFragment(activity, adapter.getItem(arg2)));
-			}
-        });
 	}
 }

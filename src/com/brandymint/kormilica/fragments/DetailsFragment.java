@@ -5,6 +5,7 @@ import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.data.Order;
 import com.brandymint.kormilica.data.Product;
+import com.brandymint.kormilica.utils.BitmapCache;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +23,9 @@ public class DetailsFragment extends CommonFragment {
 	private Product product;
 	private View view;
 
-	public DetailsFragment() {
-		super();
-	}
+	public DetailsFragment() {	}
 	
-	public DetailsFragment(CommonActivity activity, Product product) {
-		super(activity);
+	public DetailsFragment(Product product) {
 		this.product = product;
 	}
 
@@ -47,11 +45,11 @@ public class DetailsFragment extends CommonFragment {
 		ImageView imView = (ImageView)view.findViewById(R.id.image);
 		final TextView blueButton = (TextView)view.findViewById(R.id.blue_button);
 		final LinearLayout greenButton = (LinearLayout)view.findViewById(R.id.green_button);
-		final TextView description = (TextView)view.findViewById(R.id.description);
+// TODO		final TextView description = (TextView)view.findViewById(R.id.description);
 		
 		final Spinner spinner = (Spinner)view.findViewById(R.id.spinner);
 	    String[] spinnerItems = getResources().getStringArray(R.array.product_count);
-		ArrayAdapter<CharSequence> adapter = new ArrayAdapter(activity, android.R.layout.simple_spinner_item, spinnerItems); 
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, spinnerItems); 
     	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	spinner.setAdapter(adapter);
 		if(AppApplication.getInstance().getOrder() != null)
@@ -69,12 +67,9 @@ public class DetailsFragment extends CommonFragment {
 					AppApplication.getInstance().getOrder().changeCount(product, arg2);
 				}
 				updateFragment();
-				activity.updateView();
+				eventListener.event(CommonActivity.EVENT_UPDATE_ACTIVITY, null);
 			}
 		});
-
-		
-		
 
 		view.findViewById(R.id.common_layout).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {}
@@ -88,19 +83,16 @@ public class DetailsFragment extends CommonFragment {
 			greenButton.setVisibility(View.INVISIBLE);
 			blueButton.setVisibility(View.VISIBLE);
 		}
-//		description.setText(product.get);
+// TODO		description.setText(product.get);
 		price.setText(Integer.parseInt(product.getPriceCents())/100 +"  " +product.getPriceCurrency() + getString(R.string._pcs));
-//		if(AppApplication.getInstance().getOrder() != null)
-//			greenButton.setText(activity.getString(R.string.in_order)+"   "+AppApplication.getInstance().getOrder().getCountOfProduct(product.getId()) + getString(R.string.pcs));
 		if(product.getImageUrl() != null) {
 			imView.setTag(product.getImageUrl());
-			AppApplication.getInstance().getBitmapCache().loadImage(imView, true);
+			BitmapCache.getInstance().loadImage(imView, true);
 		}
+
 		greenButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				activity.showPicker(product);
-			}
+			public void onClick(View v) {			}
 		});
 		blueButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -111,14 +103,9 @@ public class DetailsFragment extends CommonFragment {
 				greenButton.setVisibility(View.VISIBLE);
 				blueButton.setVisibility(View.INVISIBLE);
 				product.setSelected(true);
-				activity.updateView();
+				eventListener.event(CommonActivity.EVENT_UPDATE_ACTIVITY, null);
 				updateFragment();
 			}
 		});
-	}
-
-	@Override
-	public void updateDataAndFragment() {
-		updateFragment();
 	}
 }

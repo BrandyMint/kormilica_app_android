@@ -75,7 +75,6 @@ public class DBHelper extends SQLiteOpenHelper {
 			Log.e(TAG, "Write table: "+((Product)item).toString());
 			for(int i = 0; i < params.length; i ++) {
 				if(item.getData(params[i]) != null) {
-					
 					cv.put(params[i], item.getData(params[i]));
 				}
 			}

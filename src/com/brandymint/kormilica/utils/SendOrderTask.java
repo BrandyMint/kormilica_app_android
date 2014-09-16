@@ -18,6 +18,7 @@ import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.data.Order;
 import com.brandymint.kormilica.data.Product;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -28,17 +29,14 @@ public class SendOrderTask extends AsyncTask<String, String, String> {
 	private static final String BASE_URL		 = "http://api.kormilica.info/";
 	private static final String API_VERSION		 = "v1";
 	private static final String VENDOR_KEY		 = "467abe2e7d33e6455fe905e879fd36be";
-//	private static final String VENDOR_KEY		 = "45751f0d53a336ffb5fb91447c165fc9";
-
-	private CommonActivity activity;
-	private LoadListener loadListener;
-	private String resultString;
 	private Order order;
+	private Context context;
+	private LoadListener loadListener;
 
-	public SendOrderTask(CommonActivity activity, LoadListener loadListener, Order order) {
-		this.activity = activity;
-		this.loadListener = loadListener;
+	public SendOrderTask(Context context, LoadListener loadListener, Order order) {
 		this.order = order;
+		this.loadListener = loadListener;
+		this.context = context;
 	}
 	
 	private String sendOrder(String[] arg) {
@@ -100,28 +98,20 @@ public class SendOrderTask extends AsyncTask<String, String, String> {
 		}
 	}
 	
-	@Override
-	protected void onPreExecute() {
-		if(activity != null)
-			activity.startProgressDialog();
-	}
 
 	@Override
 	protected String doInBackground(String... arg) {
 		String res = sendOrder(arg);
 		if(res == null)
-			return activity.getString(R.string.wrong_data);
+			return context.getString(R.string.wrong_data);
 		return res;
 	}
 
 	@Override
     protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		activity.stopProgressDialog();
 		if(result == null)
-			AppApplication.getInstance().showMessage(activity, activity.getString(R.string.error), result, activity.getString(R.string.ok), null, null, false);
-		else
-			if(loadListener != null)
-				loadListener.onLoadComplite(result);
+			AppApplication.getInstance().showMessage((CommonActivity)context, context.getString(R.string.error), result, context.getString(R.string.ok), null, null, false);
+		loadListener.onLoadComplite(result);
 	}
 }

@@ -1,6 +1,8 @@
 package com.brandymint.kormilica.utils;
 
 import java.util.ArrayList;
+
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +20,12 @@ import com.brandymint.kormilica.fragments.DetailsFragment;
 public class ProductListAdapter extends BaseAdapter {
 		private ArrayList<Product> listData;
 		private LayoutInflater inflater;
-		private CommonActivity activity;
-
-		public ProductListAdapter(CommonActivity activity, ArrayList<Product> listData) {
+		EventListener eventListener;
+		
+		public ProductListAdapter(Activity activity, ArrayList<Product> listData) {
 			inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			this.listData = listData;
-			this.activity = activity;
+			eventListener = (EventListener) activity;
 		}
 
 		public void setListData(ArrayList<Product> listData) {
@@ -68,12 +70,12 @@ public class ProductListAdapter extends BaseAdapter {
 			price.setText(Integer.parseInt(item.getPriceCents())/100 +"  " +item.getPriceCurrency());
 			if(item.getImageUrl() != null) {
 				imView.setTag(item.getImageUrl());
-				AppApplication.getInstance().getBitmapCache().loadImage(imView, true);
+				BitmapCache.getInstance().loadImage(imView, true);
 			}
 			greenButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					activity.addFragment(new DetailsFragment(activity, item));
+					eventListener.event(CommonActivity.EVENT_START_DETAILS_FRAGMENT, item);
 				}
 			});
 			blueButton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +87,7 @@ public class ProductListAdapter extends BaseAdapter {
 					greenButton.setVisibility(View.VISIBLE);
 					blueButton.setVisibility(View.INVISIBLE);
 					item.setSelected(true);
-					activity.updateView();
+					eventListener.event(CommonActivity.EVENT_UPDATE_ACTIVITY, null);
 				}
 			});
 			return view;

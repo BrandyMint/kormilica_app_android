@@ -23,20 +23,10 @@ import android.widget.TextView;
 
 public class AddressFragment extends CommonFragment implements LoadListener{
 	
-	private CommonActivity activity;
+	private String errorString, phoneString, cityString, addressString, trueMessage;
 	private View view;
 	private boolean orderComplite;
 	private boolean wrongOrder;
-	private String errorString, phoneString, cityString, addressString, trueMessage;
-
-	public AddressFragment() {
-		super();
-	}
-	
-	public AddressFragment(CommonActivity activity ) {
-		super(activity);
-		this.activity = activity;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +34,6 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 		updateFragment();
 		return view;
 	}
-
 	
 	@Override
 	public void updateFragment() {
@@ -80,7 +69,7 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 			returned.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					activity.resetFragmentCache();
+					eventListener.event(CommonActivity.EVENT_RESET_SCREENS, null);
 				}
 			});
 		} else {
@@ -105,30 +94,29 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 				@Override
 				public void onClick(View v) {
 					if(phone.getText().toString() == null || phone.getText().toString().length() == 0) {
-						AppApplication.getInstance().showMessage(activity, activity.getString(R.string.error), activity.getString(R.string.empty_phone), activity.getString(R.string.ok), null, null, false);
+						AppApplication.getInstance().showMessage(getActivity(), getActivity().getString(R.string.error), getActivity().getString(R.string.empty_phone), getActivity().getString(R.string.ok), null, null, false);
 						return;
 					}
 					if(address.getText().toString() == null || address.getText().toString().length() == 0) {
-						AppApplication.getInstance().showMessage(activity, activity.getString(R.string.error), activity.getString(R.string.empty_address), activity.getString(R.string.ok), null, null, false);
+						AppApplication.getInstance().showMessage(getActivity(), getActivity().getString(R.string.error), getActivity().getString(R.string.empty_address), getActivity().getString(R.string.ok), null, null, false);
 						return;
 					}
 					addressString = address.getText().toString();
 					cityString = AppApplication.getInstance().getVendor().getCity();
 					phoneString = phone.getText().toString();
 					String [] params = {phoneString, cityString, addressString};
-					new SendOrderTask(activity, AddressFragment.this, AppApplication.getInstance().getOrder()).execute(params);
+					((CommonActivity)getActivity()).startProgressDialog();
+					new SendOrderTask((CommonActivity)getActivity(), AddressFragment.this, AppApplication.getInstance().getOrder()).execute(params);
 				}
 			});
 		}
-		activity.updateView();
+		eventListener.event(CommonActivity.EVENT_UPDATE_ACTIVITY, null);
 	}
 
 	@Override
 	public void onLoadComplite(String string) {
-		Log.e("AddressFragment", "parse json 0 "+string);
 		try {
 			JSONObject json = new JSONObject(string);
-			Log.e("AddressFragment", "parse json 1 "+json.has("error"));
 			if(json.has("error")) {
 				orderComplite = true;
 				wrongOrder = false;
@@ -136,19 +124,13 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 			} else {
 				orderComplite = true;
 				wrongOrder = false;
-				Log.e("AddressFragment", "parse json 2 ");
 				JSONObject obj = json.getJSONObject("message");
-				Log.e("AddressFragment", "parse json 3 " + obj);
 				trueMessage = obj.getString("subject")+". "+obj.getString("text");
 			}
 			updateFragment();
 		} catch (JSONException e) {
 			Log.e("AddressFragment", "Error parse json: "+e);
 		}
-	}
-
-	@Override
-	public void updateDataAndFragment() {
-		updateFragment();
+		((CommonActivity)getActivity()).stopProgressDialog();
 	}
 }
