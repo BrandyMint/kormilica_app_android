@@ -1,22 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
+    
  
-	<android.support.v4.view.ViewPager
- 		android:id="@+id/fragment"
+	<com.astuetz.PagerSlidingTabStrip
+		android:id="@+id/pagerTitle"
+		app:pstsTextAllCaps="true"
+		app:pstsSelectedTextColor="#FF1aa5ef"
+		app:pstsIndicatorColor="#1aa5ef"
+		app:pstsShouldExpand="true"
+		android:background="#ffffff"
+ 		android:layout_width="fill_parent"
+ 		android:gravity="center_vertical"
+ 		android:layout_height="50dp"
+ 		android:layout_gravity="top"/>
+    
+    <android.support.v4.view.ViewPager
+		android:id="@+id/fragment"
+		android:layout_weight="1"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 		
-		<android.support.v4.view.PagerTabStrip
- 			android:id="@+id/pagerTitle"
- 			android:background="#d8d8d8"
- 			android:layout_width="match_parent"
- 			android:gravity="center_vertical"
- 			android:layout_height="40dp"
- 			android:layout_gravity="top">
-
-		</android.support.v4.view.PagerTabStrip>
 	</android.support.v4.view.ViewPager>
+	
+	<FrameLayout android:layout_width="fill_parent"
+	    android:background="@drawable/blue_bottom_bar"
+	    android:id="@+id/bottom_layout"
+		android:layout_height="wrap_content">
+	
+		<LinearLayout android:background="@drawable/prepare_bg_selector"
+		    android:id="@+id/blue_layout"
+			android:orientation="horizontal"
+    		android:layout_height="fill_parent" 
+  			android:layout_width="fill_parent">
+			
+			<LinearLayout 
+				android:layout_weight="1"
+				android:layout_gravity="center_vertical"
+				android:gravity="center|center"
+				android:orientation="vertical"
+    			android:layout_height="wrap_content" 
+  				android:layout_width="fill_parent">
+  				
+	  			<TextView android:gravity="center|left"
+					android:paddingLeft="20dp"
+					android:text="@string/itogo"
+					android:textColor="#ffffff"
+					android:textSize="16dp"
+					android:layout_gravity="center_vertical"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"/>
+			
+	  			<TextView android:gravity="center|left"
+	  			    android:id="@+id/summ_order"
+					android:paddingLeft="20dp"
+					android:text="1200r."
+					android:textColor="#ffffff"
+					android:textSize="16dp"
+					android:layout_gravity="center_vertical"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"/>
+	  			
+	  		</LinearLayout>    
+		    			
+	  		<TextView android:id="@+id/prepare_order"
+				android:layout_weight="1"
+				android:gravity="center|center"
+				android:text="@string/prepare_order"
+				android:textColor="#ffffff"
+				android:textSize="18dp"
+				android:layout_gravity="center_vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"/>
+			
+	  	</LinearLayout> 
+
+		<FrameLayout android:background="@drawable/gray_bottom_bar"
+		    android:id="@+id/gray_layout"
+    		android:layout_height="fill_parent" 
+  			android:layout_width="fill_parent">
+  			
+	  		<TextView android:id="@+id/minimal_summ_order"
+				android:gravity="center_vertical"
+				android:text="@string/minimal_summ"
+				android:textColor="#646464"
+				android:textSize="15dp"
+				android:layout_gravity="center|center"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+  			
+		</FrameLayout> 
+	</FrameLayout>
 </LinearLayout>

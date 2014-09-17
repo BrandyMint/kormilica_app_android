@@ -5,6 +5,7 @@ import com.brandymint.kormilica.utils.GetDataTask;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,20 +14,17 @@ public class AboutActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_activity);
-        final AppApplication app = AppApplication.getInstance();
+		getActionBar().setDisplayHomeAsUpEnabled(true);
         TextView title = (TextView) findViewById(R.id.title);
         TextView text = (TextView) findViewById(R.id.text);
         TextView dop = (TextView) findViewById(R.id.dop);
         TextView update = (TextView) findViewById(R.id.update);
-        
-        title.setText(app.getVendor().getMobileSubject());
-        text.setText(Html.fromHtml(app.getVendor().getMobileDescription()));
-        String dopString = "vendor key - "+ app.getVendor().getKey()+"\n"
-        		+"minimal price - "+app.getVendor().getMinimalPriceCents()+"\n"
-        		+"delivery price - "+app.getVendor().getDeliveryPriceCents()+"\n";
-        
+        title.setText(AppApplication.getInstance().getVendor().getMobileSubject());
+        text.setText(Html.fromHtml(AppApplication.getInstance().getVendor().getMobileDescription()));
+        String dopString = "vendor key - "+ AppApplication.getInstance().getVendor().getKey()+"\n"
+        		+"minimal price - "+AppApplication.getInstance().getVendor().getMinimalPriceCents()+"\n"
+        		+"delivery price - "+AppApplication.getInstance().getVendor().getDeliveryPriceCents()+"\n";
         dop.setText(dopString);
-        
         update.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -35,4 +33,13 @@ public class AboutActivity extends Activity {
 			}
 		});
 	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				break;
+		}
+		return true;
+	}    
 }

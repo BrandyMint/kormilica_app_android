@@ -1,7 +1,7 @@
 package com.brandymint.kormilica.utils;
 
 import com.brandymint.kormilica.AppApplication;
-import com.brandymint.kormilica.CommonActivity;
+import com.brandymint.kormilica.BaseActivity;
 
 import android.os.AsyncTask;
 
@@ -9,10 +9,10 @@ import android.os.AsyncTask;
 public class PrepareData extends AsyncTask<String, String, String> {
 
 	private LoadListener loadListener;
-	private CommonActivity activity;
+	private BaseActivity activity;
 
 
-	public PrepareData(CommonActivity activity, LoadListener loadListener) {
+	public PrepareData(BaseActivity activity, LoadListener loadListener) {
 		this.loadListener = loadListener; 
 		this.activity = activity;
 	}

@@ -6,13 +6,13 @@
 
 	<LinearLayout android:layout_width="fill_parent"
 		android:id="@+id/wrong_layout"
-		android:paddingLeft="8dp"
-		android:paddingRight="8dp"
     	android:layout_height="fill_parent"
     	android:orientation="vertical"
-   		android:background="#ffffff">
+   		android:background="#d6d6d6">
 
 	    <FrameLayout android:layout_width="fill_parent"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
 			android:paddingTop="8dp"
 			android:paddingBottom="8dp"
 			android:id="@+id/error_layout"
@@ -20,9 +20,9 @@
     		android:layout_height="wrap_content">
 
         	<TextView android:layout_width="fill_parent"
-				android:paddingTop="20dp"
+				android:paddingTop="15dp"
 				android:id="@+id/error"
-				android:paddingBottom="20dp"
+				android:paddingBottom="15dp"
 				android:text="Some error"
         		android:layout_height="fill_parent"
 		       	android:layout_gravity="center|center"
@@ -32,10 +32,18 @@
         
 	    </FrameLayout>    
     
+		<ImageView android:background="#00000000"
+			android:layout_gravity="center"
+			android:layout_height="2dp" 
+			android:layout_width="fill_parent"/> 
+        	    
     	<LinearLayout android:layout_width="fill_parent"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:paddingTop="12dp"
+			android:paddingBottom="12dp"
     		android:layout_height="wrap_content"
+    	    android:background="#ffffff"
     		android:orientation="horizontal">
 
         	<TextView android:layout_width="fill_parent"
@@ -51,21 +59,26 @@
         		android:layout_weight="0.5"
 	        	android:layout_width="fill_parent"
 				android:hint="+7"
+				android:focusable="true"
         		android:layout_height="wrap_content"
 	       		android:layout_gravity="left|center"
 			   	android:textColor="#000000"
+				android:background="#00000000"
     	    	android:textSize="18dp"/>
         
     	</LinearLayout>
     
-		<ImageView android:background="@drawable/separator"
+		<ImageView android:background="#00000000"
 			android:layout_gravity="center"
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content"/> 
+			android:layout_height="4dp" 
+			android:layout_width="fill_parent"/> 
     
-	    <LinearLayout android:layout_width="fill_parent"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
+    	<LinearLayout android:layout_width="fill_parent"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:paddingTop="12dp"
+			android:paddingBottom="12dp"
+    	    android:background="#ffffff"
 	    	android:layout_height="wrap_content"
     		android:orientation="horizontal">
 	
@@ -83,27 +96,31 @@
 				android:text="Чебоксары"
 	        	android:layout_height="wrap_content"
 		       	android:layout_gravity="left|center"
-			   	android:textColor="#000000"
+			   	android:textColor="#1aa5ef"
+				android:background="#00000000"
         		android:textSize="18dp"/>
         
 	    </LinearLayout>
 	
-		<ImageView android:background="@drawable/separator"
+		<ImageView android:background="#00000000"
 			android:layout_gravity="center"
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content"/> 
+			android:layout_height="4dp" 
+			android:layout_width="fill_parent"/> 
     
     	<LinearLayout android:layout_width="fill_parent"
-			android:paddingTop="8dp"
-			android:paddingBottom="8dp"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
+			android:paddingTop="12dp"
+			android:paddingBottom="12dp"
     		android:layout_height="wrap_content"
+    	    android:background="#ffffff"
     		android:orientation="horizontal">
 
 	        <TextView android:layout_width="fill_parent"
     	    	android:layout_weight="1"
 				android:text="@string/address"
 	        	android:layout_height="wrap_content"
-		       	android:layout_gravity="left|center"
+		       	android:layout_gravity="left|top"
 			   	android:textColor="#000000"
         		android:textSize="18dp"/>
         
@@ -111,32 +128,44 @@
     	    	android:layout_weight="0.5"
         		android:layout_width="fill_parent"
 				android:hint="@string/address_details"
-	        	android:layout_height="wrap_content"
+	        	android:layout_height="64dp"
 		       	android:layout_gravity="left|center"
 			   	android:textColor="#000000"
+				android:background="#00000000"
         		android:textSize="18dp"/>
         
     	</LinearLayout>
 
-		<ImageView android:background="@drawable/separator"
-			android:layout_gravity="center"
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content"/> 
-		
 		<ImageView android:background="#00ffffff"
 			android:layout_gravity="center"
 			android:layout_height="20dp" 
 			android:layout_width="wrap_content"/> 
 	
-	    <TextView android:background="@drawable/green_button_selector"
-    	    android:id="@+id/button"
-			android:textColor="#ffffff"
-			android:textSize="19dp"
-    		android:text="@string/deliver_order"
-			android:layout_gravity="center_vertical|center_horizontal"
-			android:gravity="center_vertical|center_horizontal"
-			android:layout_width="280dp"
-    		android:layout_height="45dp"/>
+	    <FrameLayout android:layout_width="fill_parent"
+    	    android:background="#00000000"
+    		android:layout_height="wrap_content">
+		
+		    <TextView android:background="@drawable/green_button_selector"
+    		    android:id="@+id/button"
+				android:textColor="#ffffff"
+				android:textSize="19dp"
+    			android:text="@string/deliver_order"
+				android:layout_gravity="center_vertical|center_horizontal"
+				android:gravity="center_vertical|center_horizontal"
+				android:layout_width="fill_parent"
+    			android:layout_height="50dp"/>
+		    
+		    <TextView android:background="#b3b3b3"
+    		    android:id="@+id/lock_button"
+				android:textColor="#616161"
+    			android:text="Some text"
+				android:textSize="17dp"
+				android:layout_gravity="center_vertical|center_horizontal"
+				android:gravity="center_vertical|center_horizontal"
+				android:layout_width="fill_parent"
+    			android:layout_height="50dp"/>
+		    
+		</FrameLayout>
         
 	</LinearLayout>
 	        
@@ -144,22 +173,22 @@
 
 	<LinearLayout android:layout_width="fill_parent"
 		android:id="@+id/true_layout"
-		android:paddingLeft="8dp"
-		android:paddingRight="8dp"
-   	    android:background="#d6d6d6"
+   	    android:background="#00000000"
     	android:layout_height="fill_parent"
     	android:orientation="vertical">
 
 	    <FrameLayout android:layout_width="fill_parent"
-    	    android:background="#00ff00"
+    	    android:background="#00bb00"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
 			android:paddingTop="8dp"
 			android:paddingBottom="8dp"
     		android:layout_height="wrap_content">
 
         	<TextView android:layout_width="fill_parent"
-				android:paddingTop="20dp"
 				android:id="@+id/message"
-				android:paddingBottom="20dp"
+				android:paddingTop="15dp"
+				android:paddingBottom="15dp"
 				android:text="Some error"
         		android:layout_height="fill_parent"
 		       	android:layout_gravity="center|center"
@@ -168,8 +197,10 @@
         		android:textSize="18dp"/>
         
 	    </FrameLayout>    
-    
+	    
     	<LinearLayout android:layout_width="fill_parent"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
 			android:paddingTop="8dp"
 			android:paddingBottom="8dp"
     		android:layout_height="wrap_content"
@@ -194,7 +225,14 @@
         
     	</LinearLayout>
     
-	    <LinearLayout android:layout_width="fill_parent"
+		<ImageView android:background="#00000000"
+			android:layout_gravity="center"
+			android:layout_height="4dp" 
+			android:layout_width="fill_parent"/> 
+    	
+		<LinearLayout android:layout_width="fill_parent"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
 			android:paddingTop="8dp"
 			android:paddingBottom="8dp"
 	    	android:layout_height="wrap_content"
@@ -219,7 +257,15 @@
         
 	    </LinearLayout>
 	
-    	<LinearLayout android:layout_width="fill_parent"
+		
+		<ImageView android:background="#00000000"
+			android:layout_gravity="center"
+			android:layout_height="2dp" 
+			android:layout_width="fill_parent"/> 
+		
+		<LinearLayout android:layout_width="fill_parent"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp"
 			android:paddingTop="8dp"
 			android:paddingBottom="8dp"
     		android:layout_height="wrap_content"
@@ -231,7 +277,7 @@
 	        	android:layout_height="wrap_content"
 		       	android:layout_gravity="left|center"
 			   	android:textColor="#000000"
-        		android:textSize="18dp"/>
+        		android:textSize="17dp"/>
         
 	        <TextView android:id="@+id/address_text"
     	    	android:layout_weight="0.5"
@@ -243,15 +289,20 @@
         
     	</LinearLayout>
 
-		<ImageView android:background="@drawable/separator"
+	    <ImageView android:background="#00000000"
+			android:layout_gravity="center"
+			android:layout_height="9dp" 
+			android:layout_width="fill_parent"/> 
+				
+	    <ImageView android:background="@drawable/separator"
 			android:layout_gravity="center"
 			android:layout_height="wrap_content" 
 			android:layout_width="wrap_content"/> 
 		
-		<ImageView android:background="#00d6d6d6"
+	    <ImageView android:background="#00000000"
 			android:layout_gravity="center"
-			android:layout_height="20dp" 
-			android:layout_width="wrap_content"/> 
+			android:layout_height="9dp" 
+			android:layout_width="fill_parent"/> 
     	
         <TextView android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
@@ -264,8 +315,8 @@
     	<LinearLayout android:layout_width="fill_parent"
 			android:paddingTop="8dp"
 			android:paddingBottom="8dp"
-			android:paddingLeft="10dp"
-			android:paddingRight="10dp"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
     		android:layout_height="wrap_content"
     		android:orientation="horizontal">
 
@@ -273,7 +324,9 @@
     	    	android:layout_weight="1"
 				android:id="@+id/phone_number"
 	        	android:layout_height="wrap_content"
-		       	android:layout_gravity="left|center"
+		       	android:layout_gravity="right|center"
+		       	android:gravity="right|center"
+				android:paddingRight="15dp"
 			   	android:textColor="#000000"
         		android:textSize="15dp"/>
         
@@ -283,9 +336,9 @@
     	    	android:layout_weight="1.5"
         		android:layout_width="fill_parent"
 	        	android:layout_height="wrap_content"
-		       	android:layout_gravity="center_vertical"
+		       	android:layout_gravity="left|center"
 		       	android:gravity="center|center"
-			   	android:textColor="#000000"
+			   	android:textColor="#1aa5ef"
         		android:textSize="18dp"/>
         
     	</LinearLayout>
@@ -317,8 +370,5 @@
 				android:layout_height="fill_parent"/>
 				
 	  	</LinearLayout>
-        
 	</LinearLayout>        
-	
-
 </FrameLayout>

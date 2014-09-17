@@ -2,10 +2,13 @@ package com.brandymint.kormilica.fragments;
 
 import com.brandymint.kormilica.AppApplication;
 import com.brandymint.kormilica.CommonActivity;
+import com.brandymint.kormilica.PhotoActivity;
 import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.data.Order;
 import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.utils.BitmapCache;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +52,7 @@ public class DetailsFragment extends CommonFragment {
 		
 		final Spinner spinner = (Spinner)view.findViewById(R.id.spinner);
 	    String[] spinnerItems = getResources().getStringArray(R.array.product_count);
-		ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, spinnerItems); 
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), R.layout.spinner_item, spinnerItems); 
     	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	spinner.setAdapter(adapter);
 		if(AppApplication.getInstance().getOrder() != null)
@@ -73,6 +76,14 @@ public class DetailsFragment extends CommonFragment {
 
 		view.findViewById(R.id.common_layout).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {}
+        });
+		
+		imView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	Intent intent = new Intent(getActivity(), PhotoActivity.class);
+            	intent.putExtra("PHOTO_URL", product.getImageUrl());
+            	getActivity().startActivity(intent);
+            }
         });
         
 		name.setText(product.getTitle());

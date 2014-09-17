@@ -48,6 +48,7 @@ public class ListFragment extends CommonFragment {
 
 	@Override
 	public void updateFragment() {
-		adapter.notifyDataSetChanged();
+		if(adapter != null)
+			adapter.notifyDataSetChanged();
 	}
 }

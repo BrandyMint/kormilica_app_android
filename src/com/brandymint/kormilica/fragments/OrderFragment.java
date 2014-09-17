@@ -7,6 +7,7 @@ import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.utils.OrderAdapter;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class OrderFragment extends CommonFragment {
 	
+	private static final String TAG = "OrderFragment";
 	private OrderAdapter adapter;
 	private ListView listView;
 
@@ -29,9 +31,13 @@ public class OrderFragment extends CommonFragment {
 	}
 	
 	public void cleanProdOrderList() {
-		for(Product prod: AppApplication.getInstance().getOrder().getProductList())
-			if(prod.getId().equals("temp"))
-				AppApplication.getInstance().getOrder().getProductList().remove(prod);
+		try{
+			for(Product prod: AppApplication.getInstance().getOrder().getProductList())
+				if(prod.getId().equals("temp"))
+					AppApplication.getInstance().getOrder().getProductList().remove(prod);
+		}catch(Exception ex) {
+			Log.e(TAG, "Error durring delete wrong order item:  "+ex);
+		}
 	}
 	
 	@Override

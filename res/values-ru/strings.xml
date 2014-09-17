@@ -31,6 +31,10 @@
     <string name="about">О нас</string>
     <string name="about_text">Разного рода информация о разработчиках, приложении, о возвожностях как разработчиков так и приложения. \n\nКроме того контактная информация\n\nи адрес сайта.   </string>
     <string name="address_details">Улица, дом, квартира</string>
+    
+    <string name="button_empty_phone">Введите номер телефона</string>
+    <string name="button_empty_address">Введите адрес доставки</string>
+    <string name="button_empty_phone_address">Введите номер телефона и адрес доставки</string>
     <string name="deliver_order">Доставить заказ</string>
     <string name="updated_successfull">База данных была успешно обновлена.</string>
     <string name="empty_phone">Поле ввода телефона пусто.</string>

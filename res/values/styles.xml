@@ -5,7 +5,7 @@
     </style>
     
     <style name="KormilicaActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#999999</item>
+        <item name="android:background">#ffffff</item>
         <item name="android:titleTextStyle">@style/KormilicaTheme.ActionBar.Text</item>
     </style>
 

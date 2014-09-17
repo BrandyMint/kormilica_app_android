@@ -2,20 +2,22 @@ package com.brandymint.kormilica.fragments;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.brandymint.kormilica.AppApplication;
 import com.brandymint.kormilica.CommonActivity;
 import com.brandymint.kormilica.R;
 import com.brandymint.kormilica.utils.LoadListener;
 import com.brandymint.kormilica.utils.SendOrderTask;
-
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -25,6 +27,8 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 	
 	private String errorString, phoneString, cityString, addressString, trueMessage;
 	private View view;
+	private EditText phone, address;
+	private TextView lockButton;
 	private boolean orderComplite;
 	private boolean wrongOrder;
 
@@ -61,7 +65,7 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 				@Override
 				public void onClick(View v) {
 					String number = "tel:" + AppApplication.getInstance().getVendor().getPhone().replaceAll("()-", "").trim();
-			        Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(number)); 
+			        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse(number)); 
 			        startActivity(callIntent);
 				}
 			});
@@ -75,13 +79,51 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 		} else {
 			trueLayout.setVisibility(View.INVISIBLE);
 			wrongLayout.setVisibility(View.VISIBLE);
-			final EditText phone = (EditText) view.findViewById(R.id.phone);
+			phone = (EditText) view.findViewById(R.id.phone);
+			phone.requestFocus();
+			InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 			TextView city = (TextView) view.findViewById(R.id.city);
-			final EditText address = (EditText) view.findViewById(R.id.address);
+			address = (EditText) view.findViewById(R.id.address);
 			TextView button = (TextView) view.findViewById(R.id.button);
+			lockButton = (TextView) view.findViewById(R.id.lock_button);
 			FrameLayout errorLayout = (FrameLayout) view.findViewById(R.id.error_layout);
 			TextView errorText = (TextView) view.findViewById(R.id.error);
 			city.setText(AppApplication.getInstance().getVendor().getCity());
+			lockButton.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {		}
+			});
+	    	phone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+	    	    @Override
+	    	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+	    	    	if (actionId == EditorInfo.IME_ACTION_NEXT) {
+            			checkButtonState();
+	            		address.requestFocus();
+	        			InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+	        			imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+	            		return true;
+	    	        }
+	    	        return false;
+	    	    }
+	    	});
+
+	    	address.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+	    	    @Override
+	    	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+	    	    	Log.e("ADDRESS", "event - "+event);
+	    	    	Log.e("ADDRESS", "actionId - "+actionId);
+
+	    	    	if (event.getKeyCode() == event.KEYCODE_ENTER) {
+            			checkButtonState();
+	                	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+	            		imm.hideSoftInputFromWindow(phone.getWindowToken(), 0);
+		                return true;
+	    	        }
+	    	        return false;
+	    	    }
+	    	});
+
+			
 			if(wrongOrder) {
 			  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 			  	errorLayout.setLayoutParams(parms);
@@ -111,8 +153,22 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 			});
 		}
 		eventListener.event(CommonActivity.EVENT_UPDATE_ACTIVITY, null);
+		checkButtonState();
 	}
 
+	private void checkButtonState() {
+		lockButton.setVisibility(View.VISIBLE);
+		if((phone.getText().toString() == null || phone.getText().toString().length() == 0) 
+				&& (address.getText().toString() == null || address.getText().toString().length() == 0)) 
+			lockButton.setText(R.string.button_empty_phone_address);
+		else if(phone.getText().toString() == null || phone.getText().toString().length() == 0) 
+			lockButton.setText(R.string.button_empty_phone);
+		else if(address.getText().toString() == null || address.getText().toString().length() == 0) 
+			lockButton.setText(R.string.button_empty_address);
+		else
+			lockButton.setVisibility(View.INVISIBLE);
+	}
+	
 	@Override
 	public void onLoadComplite(String string) {
 		try {

@@ -14,24 +14,31 @@
     	android:layout_height="match_parent"/>
 
 	
-	<FrameLayout android:layout_gravity="center|left"
-   	   	android:background="@drawable/black_border_bg"
+	<LinearLayout android:layout_gravity="center|left"
    	   	android:visibility="invisible"
+   	   	android:orientation="vertical"
        	android:id="@+id/itogo_layout"
        	android:layout_width="fill_parent"
        	android:layout_height="wrap_content">
    	
+		<ImageView android:background="#d6d6d6"
+			android:layout_gravity="center"
+			android:layout_height="2dp" 
+			android:layout_width="fill_parent"/> 
+	    	    
    		<TextView android:id="@+id/itogo_summ"
 			android:textColor="#000000"
 			android:textSize="13dp"
    			android:text="Итого: 1600руб."
+			android:paddingTop="15dp"
+			android:paddingBottom="15dp"
 			android:layout_gravity="center_vertical|center_horizontal"
 			android:layout_weight="1"
 			android:gravity="center_vertical|center_horizontal"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"/>
           			
-   	</FrameLayout>
+   	</LinearLayout>
 	
 	<FrameLayout android:layout_width="fill_parent"
 	    android:background="@drawable/blue_bottom_bar"
@@ -46,26 +53,27 @@
 			
 			<LinearLayout 
 				android:layout_weight="1"
-				android:layout_gravity="center|center"
+				android:layout_gravity="center_vertical"
 				android:gravity="center|center"
 				android:orientation="vertical"
     			android:layout_height="wrap_content" 
   				android:layout_width="fill_parent">
   				
-	  			<TextView android:gravity="center|center"
+	  			<TextView android:gravity="center|left"
+					android:paddingLeft="20dp"
 					android:text="@string/itogo"
-			        android:paddingBottom="1dp"
 					android:textColor="#ffffff"
-					android:textSize="18dp"
+					android:textSize="16dp"
 					android:layout_gravity="center_vertical"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"/>
 			
-	  			<TextView android:gravity="center|center"
+	  			<TextView android:gravity="center|left"
 	  			    android:id="@+id/summ_order"
+					android:paddingLeft="20dp"
 					android:text="1200r."
 					android:textColor="#ffffff"
-					android:textSize="18dp"
+					android:textSize="16dp"
 					android:layout_gravity="center_vertical"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"/>
@@ -119,7 +127,6 @@
 				android:layout_height="wrap_content"/>
   			
 		</FrameLayout> 
-					
 	</FrameLayout>
 	</LinearLayout>
 

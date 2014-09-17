@@ -78,7 +78,7 @@ public class OrderAdapter extends BaseAdapter {
 				FrameLayout button = (FrameLayout)view.findViewById(R.id.button);
 				final Spinner spinner = (Spinner)view.findViewById(R.id.spinner);
 			    String[] spinnerItems = context.getResources().getStringArray(R.array.product_count);
-				ArrayAdapter<CharSequence> adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerItems); 
+				ArrayAdapter<CharSequence> adapter = new ArrayAdapter(context, R.layout.spinner_item, spinnerItems); 
 		    	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		    	spinner.setAdapter(adapter);
 				if(AppApplication.getInstance().getOrder() != null)

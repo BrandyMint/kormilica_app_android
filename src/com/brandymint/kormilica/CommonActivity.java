@@ -6,76 +6,58 @@ import com.brandymint.kormilica.data.ProductData;
 import com.brandymint.kormilica.fragments.AddressFragment;
 import com.brandymint.kormilica.fragments.CommonFragment;
 import com.brandymint.kormilica.fragments.DetailsFragment;
-import com.brandymint.kormilica.fragments.ListPageFragment;
 import com.brandymint.kormilica.fragments.OrderFragment;
 import com.brandymint.kormilica.utils.EventListener;
 import com.brandymint.kormilica.utils.LoadListener;
-import com.brandymint.kormilica.utils.GetDataTask;
-import com.brandymint.kormilica.utils.PrepareData;
-import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class CommonActivity extends FragmentActivity implements LoadListener, EventListener {
+public class CommonActivity extends BaseActivity implements LoadListener, EventListener {
 	
 	private static final String TAG = "CommonActivity";
-    private CommonActivity activity;
-	protected ProgressDialog progressDialog;
-	private ActionBar actionBar;
-	private AppApplication app;
+	
+	public static final int ID_FRAGMENT_DETAILS		= 1;
+	public static final int ID_FRAGMENT_ORDER		= 2;
+	public static final int ID_FRAGMENT_ADDRESS		= 3;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = this;
 		setContentView(R.layout.activity);
-        app = AppApplication.getInstance();
-        actionBar = getActionBar();
-		if(!app.isOnline()) {
-			app.showMessage(this, getString(R.string.warning), getString(R.string.error_netw_connection), getString(R.string.action_settings), getString(R.string.exit), new Intent(android.provider.Settings.ACTION_SETTINGS), true);
-			return;
+		Intent intent = getIntent();
+		if(intent.hasExtra("INTENT_ID")) {
+			final int fragmentId = intent.getExtras().getInt("INTENT_ID");
+			switch(fragmentId) {
+				case ID_FRAGMENT_DETAILS:
+						String productId = intent.getExtras().getString("PRODUCT_ID");
+						addFragment(new DetailsFragment(ProductData.getInstance().getProductMap().get(productId)));
+					break;
+				case ID_FRAGMENT_ORDER:
+						addFragment(new OrderFragment());
+					break;
+				case ID_FRAGMENT_ADDRESS:
+						addFragment(new AddressFragment());
+					break;
+			}
 		}
-		String firstStart = AppApplication.getInstance().loadPreference(AppApplication.IS_FIRST_START);
-		getSupportFragmentManager().addOnBackStackChangedListener(new OnBackStackChangedListener() {
-	        @Override
-	        public void onBackStackChanged() {
-	        	if(getSupportFragmentManager().getBackStackEntryCount() == 0)
-	            	finish();
-	        	else
-	        		updateView();
-	        }
-	    });
-		if(firstStart == null || Boolean.parseBoolean(firstStart))
-			(new GetDataTask(this)).execute();
-		else
-			(new PrepareData(this, this)).execute();
-			
     }
     
 	public void updateView() {
 		Log.e(TAG, "updateView()");
 		TextView summOrder = (TextView) findViewById(R.id.summ_order);
-		TextView prepareOrder = (TextView) findViewById(R.id.prepare_order);
 		TextView prepareOrderFull = (TextView) findViewById(R.id.prepare_order_full);
-		TextView minimalOrder = (TextView) findViewById(R.id.minimal_summ_order);
 		LinearLayout blueLayout = (LinearLayout) findViewById(R.id.blue_layout);
 		LinearLayout fullBlueLayout = (LinearLayout) findViewById(R.id.full_blue_layout);
 		TextView itogo_summ = (TextView) findViewById(R.id.itogo_summ);
 		FrameLayout bottomLayout = (FrameLayout) findViewById(R.id.bottom_layout);
-		FrameLayout itogoLayout = (FrameLayout) findViewById(R.id.itogo_layout);
+		LinearLayout itogoLayout = (LinearLayout) findViewById(R.id.itogo_layout);
 		FrameLayout grayLayout = (FrameLayout) findViewById(R.id.gray_layout);
 
 		Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.activity_container);
@@ -116,28 +98,8 @@ public class CommonActivity extends FragmentActivity implements LoadListener, Ev
 		  	itogo_summ.setText(getString(R.string.itogo)+": "+summ/100+" "+AppApplication.getInstance().getVendor().getDeliveryPriceCurrency());
 		  	itogoLayout.setLayoutParams(parms);
 		  	bottomLayout.setLayoutParams(parms);
-		} else {
-			actionBar.setDisplayHomeAsUpEnabled(false);
-			setTitle(app.getVendor().getName());
-			itogoLayout.setVisibility(View.INVISIBLE);
-		  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(1,1);
-		  	itogoLayout.setLayoutParams(parms);
-			fullBlueLayout.setVisibility(View.INVISIBLE);
-			if(app.getOrder() == null ||  app.getOrder().getProductList().size() <= 0) {
-				blueLayout.setVisibility(View.INVISIBLE);
-				grayLayout.setVisibility(View.VISIBLE);
-			} else {
-				blueLayout.setVisibility(View.VISIBLE);
-				grayLayout.setVisibility(View.INVISIBLE);
-				int summ = app.getOrder().getSummOrder()/100;
-				summOrder.setText(""+summ+"  "+app.getVendor().getMinimalPriceCurrency());
-			}
-			if(app.getVendor() != null)
-				minimalOrder.setText(app.getVendor().getMobileMinimalAlert());
-		  	parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		  	bottomLayout.setLayoutParams(parms);
 		}
-
+	    
 		prepareOrderFull.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -162,17 +124,29 @@ public class CommonActivity extends FragmentActivity implements LoadListener, Ev
 		});
 	}
     
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-		menu = openAboutMenu(menu);
-		return super.onCreateOptionsMenu(menu);
-    }
-
-	public Menu openAboutMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.about_menu, menu);
-        return menu;
+	public void addFragment(CommonFragment fragment) {
+//		if(fragment instanceof ListPageActivity || fragment instanceof ListFragment)
+//			getSupportFragmentManager().beginTransaction().add(R.id.activity_container, fragment).addToBackStack("KormilicaSteck").commit();  		
+//		else
+			replaceFragment(fragment);
+		updateView();
 	}
 
+	public void replaceFragment(CommonFragment fragment) {
+		getSupportFragmentManager().beginTransaction().replace(R.id.activity_container, fragment).addToBackStack("KormilicaSteck").commit();  		
+	}
+	
+	public void removeFragment() {
+		getSupportFragmentManager().popBackStack();	
+		updateView();
+	}
+	
+	private void resetScreen() {
+		while (getSupportFragmentManager().getBackStackEntryCount() > 0)
+		    getSupportFragmentManager().popBackStackImmediate();
+		super.finish();
+	}
+	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 			case R.id.about:
@@ -188,63 +162,12 @@ public class CommonActivity extends FragmentActivity implements LoadListener, Ev
 		return true;
 	}    
 	
-	public void showToastMessage(String message) {
-		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-	}
-
-	public void addFragment(CommonFragment fragment) {
-		getSupportFragmentManager().beginTransaction().add(R.id.activity_container, fragment).addToBackStack("KormilicaSteck").commit();  		
-		updateView();
-	}
-	
-	public void removeFragment() {
-		getSupportFragmentManager().popBackStack();	
-		updateView();
-	}
-	
-
-
 	@Override
 	public void onLoadComplite(String string) {
 		resetScreen();
 		stopProgressDialog();
 	}
 	
-	private void resetScreen() {
-		while (getSupportFragmentManager().getBackStackEntryCount() > 0)
-		    getSupportFragmentManager().popBackStackImmediate();
-		addFragment(new ListPageFragment());
-		ProductData.getInstance().resetSelectedProducts();
-		updateView();
-	}
-	
-	public void startProgressDialog() {
-        try{
-        	if(progressDialog == null)
-        		progressDialog = new ProgressDialog(this);
-    		progressDialog.setTitle(getString(R.string.please_wait));
-    		progressDialog.setIndeterminate(true); 
-    		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-    		progressDialog.setCancelable(false);
-    		progressDialog.show();
-        }catch(Exception ex) {
-        	Log.e(TAG, "Error start Progress dialog:  "+ex);
-        }
-	}
-	
-	public void stopProgressDialog() {
-        try{
-        	if(progressDialog != null)
-        		progressDialog.dismiss();
-        }catch(Exception ex) {
-        	Log.e(TAG, "Error stop Progress dialog:  "+ex);
-        }
-	}
-	
-	
-	public static final int EVENT_UPDATE_ACTIVITY			= 0;
-	public static final int EVENT_RESET_SCREENS				= 1;
-	public static final int EVENT_START_DETAILS_FRAGMENT	= 2;
 
 	@Override
 	public void event(int event, AbstractData data) {

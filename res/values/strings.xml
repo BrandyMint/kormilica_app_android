@@ -30,6 +30,9 @@
     <string name="address">Address:</string>
     <string name="about">About us</string>
     <string name="address_details">Street, home, room</string>
+    <string name="button_empty_phone">Please enter phone</string>
+    <string name="button_empty_address">Please enter addres of delivery</string>
+    <string name="button_empty_phone_address">Please enter phone number and addres of delivery</string>
     <string name="deliver_order">Deliver the order</string>
     <string name="updated_successfull">Database was updated successfully</string>
     <string name="empty_phone">Field phone is empty.</string>
