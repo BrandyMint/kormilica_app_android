@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,7 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class AddressFragment extends CommonFragment implements LoadListener{
+public class AddressFragment extends CommonFragment implements LoadListener, TextWatcher {
 	
 	private String errorString, phoneString, cityString, addressString, trueMessage;
 	private View view;
@@ -93,28 +95,14 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 			lockButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {		}
 			});
-	    	phone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-	    	    @Override
-	    	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-	    	    	if (actionId == EditorInfo.IME_ACTION_NEXT) {
-            			checkButtonState();
-	            		address.requestFocus();
-	        			InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-	        			imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-	            		return true;
-	    	        }
-	    	        return false;
-	    	    }
-	    	});
+			
+			phone.addTextChangedListener(this);
+			address.addTextChangedListener(this);
 
 	    	address.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 	    	    @Override
 	    	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-	    	    	Log.e("ADDRESS", "event - "+event);
-	    	    	Log.e("ADDRESS", "actionId - "+actionId);
-
 	    	    	if (event.getKeyCode() == event.KEYCODE_ENTER) {
-            			checkButtonState();
 	                	InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 	            		imm.hideSoftInputFromWindow(phone.getWindowToken(), 0);
 		                return true;
@@ -122,7 +110,6 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 	    	        return false;
 	    	    }
 	    	});
-
 			
 			if(wrongOrder) {
 			  	LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -189,4 +176,15 @@ public class AddressFragment extends CommonFragment implements LoadListener{
 		}
 		((CommonActivity)getActivity()).stopProgressDialog();
 	}
+
+	@Override
+	public void afterTextChanged(Editable arg0) {
+		checkButtonState();
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {	}
 }

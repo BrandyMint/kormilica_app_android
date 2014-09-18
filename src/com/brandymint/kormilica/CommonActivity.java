@@ -1,6 +1,8 @@
 package com.brandymint.kormilica;
 
 import com.brandymint.kormilica.data.AbstractData;
+import com.brandymint.kormilica.data.Category;
+import com.brandymint.kormilica.data.CategoryList;
 import com.brandymint.kormilica.data.Product;
 import com.brandymint.kormilica.data.ProductData;
 import com.brandymint.kormilica.fragments.AddressFragment;
@@ -142,6 +144,10 @@ public class CommonActivity extends BaseActivity implements LoadListener, EventL
 	}
 	
 	private void resetScreen() {
+		for(CategoryList list:ProductData.getInstance().getProductList())
+			for(Product product:list.getList())
+				product.setSelected(false);
+			
 		while (getSupportFragmentManager().getBackStackEntryCount() > 0)
 		    getSupportFragmentManager().popBackStackImmediate();
 		super.finish();
